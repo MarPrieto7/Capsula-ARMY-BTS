@@ -160,6 +160,37 @@
   50% { box-shadow: 0 0 60px hsl(275 90% 65% / 0.6); }
 }
 
+/* BTS motif animations */
+@keyframes motif-drift {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(40px,-30px) scale(1.1); }
+  66%  { transform: translate(-30px,20px) scale(0.95); }
+  100% { transform: translate(0,0) scale(1); }
+}
+@keyframes motif-float {
+  0%, 100% { transform: translateY(0) rotate(var(--r,0deg)); }
+  50%      { transform: translateY(-30px) rotate(calc(var(--r,0deg) + 8deg)); }
+}
+@keyframes motif-pulse {
+  0%, 100% { transform: scale(1); opacity: var(--op,0.05); }
+  50%      { transform: scale(1.1); opacity: calc(var(--op,0.05) * 1.8); }
+}
+@keyframes motif-spin     { to { transform: rotate(360deg); } }
+@keyframes motif-spin-rev { to { transform: rotate(-360deg); } }
+@keyframes motif-rise {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-200px) translateX(20px); opacity: 0; }
+}
+
+.motif-drift    { animation: motif-drift 22s ease-in-out infinite; }
+.motif-float    { animation: motif-float 24s ease-in-out infinite; }
+.motif-pulse    { animation: motif-pulse 30s ease-in-out infinite; }
+.motif-spin     { animation: motif-spin 60s linear infinite; }
+.motif-spin-rev { animation: motif-spin-rev 80s linear infinite; }
+.motif-rise     { animation: motif-rise 30s ease-in-out infinite; }
+
 .animate-fade-up { animation: fade-up 0.7s var(--transition-silk) both; }
 .animate-scale-in { animation: scale-in 0.5s var(--transition-silk) both; }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
