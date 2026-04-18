@@ -9,6 +9,8 @@ import CapsuleCard, { type CardFormat } from "@/components/CapsuleCard";
 import LangSwitcher from "@/components/LangSwitcher";
 import AudioToggle from "@/components/AudioToggle";
 import ArirangMark from "@/components/ArirangMark";
+import CapsuleHistory from "@/components/CapsuleHistory";
+import { useCapsuleHistory } from "@/hooks/useCapsuleHistory";
 import { MOODS, generateCapsule, sanitize, type Capsule } from "@/data/capsule";
 import { useI18n } from "@/hooks/useI18n";
 import hero from "@/assets/hero-arirang.jpg";
@@ -25,6 +27,7 @@ const Index = () => {
   const [capsule, setCapsule] = useState<Capsule | null>(null);
   const [format, setFormat] = useState<CardFormat>("post");
   const cardRef = useRef<HTMLDivElement>(null);
+  const { history, add: addHistory, clear: clearHistory } = useCapsuleHistory();
 
   // SEO — refresh on language change
   useEffect(() => {
@@ -43,12 +46,22 @@ const Index = () => {
   const startCompose = () => setStep("compose");
   const generate = () => {
     if (!mood) return;
-    setCapsule(generateCapsule(mood, sanitize(message)));
+    const c = generateCapsule(mood, sanitize(message));
+    setCapsule(c);
+    addHistory(c);
     setStep("result");
   };
   const regenerate = () => {
     if (!mood) return;
-    setCapsule(generateCapsule(mood, sanitize(message)));
+    const c = generateCapsule(mood, sanitize(message));
+    setCapsule(c);
+    addHistory(c);
+  };
+  const openFromHistory = (c: Capsule) => {
+    setCapsule(c);
+    setMood(c.mood.id);
+    setMessage(c.message ?? "");
+    setStep("result");
   };
   const reset = () => { setStep("intro"); setMood(null); setMessage(""); setCapsule(null); };
 
@@ -125,6 +138,7 @@ const Index = () => {
           <ArirangMark />
         </button>
         <div className="flex items-center gap-2">
+          <CapsuleHistory history={history} onOpen={openFromHistory} onClear={clearHistory} />
           <AudioToggle />
           <LangSwitcher />
         </div>

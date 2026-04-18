@@ -62,6 +62,11 @@ export type Dict = {
   shareText: string;
   audioOn: string;
   audioOff: string;
+  historyTitle: string;
+  historySub: string;
+  historyEmpty: string;
+  historyClear: string;
+  scanQR: string;
   moods: Record<string, string>;
 };
 
@@ -102,6 +107,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "Sharing not supported here — downloaded instead 💜",
     shareTitle: "My Arirang Capsule 💜", shareText: "I made my ARMY time capsule. Make yours too 💜",
     audioOn: "Mute music", audioOff: "Play ambient music",
+    historyTitle: "Your capsules", historySub: "The last 5 capsules you sealed — kept only on this device.",
+    historyEmpty: "No capsules yet. Seal your first one 💜", historyClear: "Clear history",
+    scanQR: "Scan to make yours",
     moods: baseMoods("Happy","Sad","Hopeful","Nostalgic","Lost","Motivated"),
   },
   es: {
@@ -136,6 +144,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "No se puede compartir aquí — descargada 💜",
     shareTitle: "Mi Arirang Capsule 💜", shareText: "Hice mi cápsula del tiempo ARMY. Haz la tuya 💜",
     audioOn: "Silenciar música", audioOff: "Reproducir música ambiente",
+    historyTitle: "Tus cápsulas", historySub: "Las últimas 5 cápsulas que sellaste — solo en este dispositivo.",
+    historyEmpty: "Aún no hay cápsulas. Sella tu primera 💜", historyClear: "Borrar historial",
+    scanQR: "Escanea para crear la tuya",
     moods: baseMoods("Feliz","Triste","Esperanzada","Nostálgica","Perdida","Motivada"),
   },
   "es-419": {
@@ -170,6 +181,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "No se puede compartir acá — descargada 💜",
     shareTitle: "Mi Arirang Capsule 💜", shareText: "Hice mi cápsula del tiempo ARMY. Hacé la tuya 💜",
     audioOn: "Silenciar música", audioOff: "Reproducir música ambiente",
+    historyTitle: "Tus cápsulas", historySub: "Las últimas 5 cápsulas que sellaste — solo en este dispositivo.",
+    historyEmpty: "Aún no hay cápsulas. Sellá tu primera 💜", historyClear: "Borrar historial",
+    scanQR: "Escaneá para crear la tuya",
     moods: baseMoods("Feliz","Triste","Esperanzada","Nostálgica","Perdida","Motivada"),
   },
   pt: {
@@ -204,6 +218,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "Compartilhamento não suportado — baixada 💜",
     shareTitle: "Minha Arirang Capsule 💜", shareText: "Fiz minha cápsula ARMY. Faça a sua também 💜",
     audioOn: "Silenciar música", audioOff: "Tocar música ambiente",
+    historyTitle: "Suas cápsulas", historySub: "As últimas 5 cápsulas que você selou — só neste dispositivo.",
+    historyEmpty: "Ainda não há cápsulas. Sele a sua primeira 💜", historyClear: "Limpar histórico",
+    scanQR: "Escaneie para criar a sua",
     moods: baseMoods("Feliz","Triste","Esperançosa","Nostálgica","Perdida","Motivada"),
   },
   ko: {
@@ -238,6 +255,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "공유를 지원하지 않아 다운로드했어요 💜",
     shareTitle: "나의 Arirang Capsule 💜", shareText: "ARMY 타임 캡슐을 만들었어요. 당신도 만들어봐요 💜",
     audioOn: "음악 끄기", audioOff: "잔잔한 음악 켜기",
+    historyTitle: "당신의 캡슐", historySub: "최근 봉인한 5개의 캡슐 — 이 기기에만 저장돼요.",
+    historyEmpty: "아직 캡슐이 없어요. 첫 캡슐을 봉인해보세요 💜", historyClear: "기록 지우기",
+    scanQR: "스캔해서 만들어보세요",
     moods: baseMoods("행복","슬픔","희망","그리움","길잃음","열정"),
   },
   ja: {
@@ -272,6 +292,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "共有に対応していません — ダウンロードしました 💜",
     shareTitle: "私のArirang Capsule 💜", shareText: "ARMYタイムカプセルを作りました。あなたも作ってね 💜",
     audioOn: "音楽をミュート", audioOff: "アンビエント音楽を再生",
+    historyTitle: "あなたのカプセル", historySub: "最近封印した5つのカプセル — この端末にのみ保存。",
+    historyEmpty: "まだカプセルがありません。最初の一つを封印しましょう 💜", historyClear: "履歴を消去",
+    scanQR: "スキャンして作る",
     moods: baseMoods("幸せ","悲しい","希望","懐かしい","迷い","情熱"),
   },
   zh: {
@@ -306,6 +329,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "此处不支持分享 — 已下载 💜",
     shareTitle: "我的 Arirang Capsule 💜", shareText: "我做了我的 ARMY 时间胶囊。你也来做一个 💜",
     audioOn: "静音", audioOff: "播放氛围音乐",
+    historyTitle: "你的胶囊", historySub: "你封存的最近 5 个胶囊 —— 仅保存在此设备。",
+    historyEmpty: "还没有胶囊。封存你的第一个吧 💜", historyClear: "清除历史",
+    scanQR: "扫码创建你的",
     moods: baseMoods("快乐","悲伤","希望","怀念","迷茫","热血"),
   },
   fr: {
@@ -340,6 +366,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "Partage non supporté ici — téléchargée 💜",
     shareTitle: "Ma Arirang Capsule 💜", shareText: "J'ai créé ma capsule ARMY. Crée la tienne 💜",
     audioOn: "Couper la musique", audioOff: "Jouer la musique d'ambiance",
+    historyTitle: "Tes capsules", historySub: "Les 5 dernières capsules scellées — uniquement sur cet appareil.",
+    historyEmpty: "Aucune capsule encore. Scelle la première 💜", historyClear: "Effacer l'historique",
+    scanQR: "Scanne pour créer la tienne",
     moods: baseMoods("Heureuse","Triste","Pleine d'espoir","Nostalgique","Perdue","Motivée"),
   },
   de: {
@@ -374,6 +403,9 @@ export const DICT: Record<Lang, Dict> = {
     toastShareFallback: "Teilen nicht unterstützt — heruntergeladen 💜",
     shareTitle: "Meine Arirang Capsule 💜", shareText: "Ich habe meine ARMY-Kapsel erstellt. Erstell deine 💜",
     audioOn: "Musik stummschalten", audioOff: "Ambient-Musik abspielen",
+    historyTitle: "Deine Kapseln", historySub: "Die letzten 5 versiegelten Kapseln — nur auf diesem Gerät.",
+    historyEmpty: "Noch keine Kapseln. Versiegle deine erste 💜", historyClear: "Verlauf löschen",
+    scanQR: "Scannen, um deine zu erstellen",
     moods: baseMoods("Glücklich","Traurig","Hoffnungsvoll","Nostalgisch","Verloren","Motiviert"),
   },
 };
