@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import StarField from "@/components/StarField";
 import BTSMotifs from "@/components/BTSMotifs";
-import CapsuleCard from "@/components/CapsuleCard";
+import CapsuleCard, { type CardFormat } from "@/components/CapsuleCard";
 import LangSwitcher from "@/components/LangSwitcher";
+import AudioToggle from "@/components/AudioToggle";
+import ArirangMark from "@/components/ArirangMark";
 import { MOODS, generateCapsule, sanitize, type Capsule } from "@/data/capsule";
 import { useI18n } from "@/hooks/useI18n";
 import hero from "@/assets/hero-arirang.jpg";
@@ -21,6 +23,7 @@ const Index = () => {
   const [mood, setMood] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [capsule, setCapsule] = useState<Capsule | null>(null);
+  const [format, setFormat] = useState<CardFormat>("post");
   const cardRef = useRef<HTMLDivElement>(null);
 
   // SEO — refresh on language change
@@ -49,9 +52,22 @@ const Index = () => {
   };
   const reset = () => { setStep("intro"); setMood(null); setMessage(""); setCapsule(null); };
 
+  // Native share-target sizes (in CSS px → toPng's pixelRatio scales up)
+  const SHARE_PIXELS: Record<CardFormat, { w: number; h: number; ratio: number }> = {
+    post:   { w: 540, h: 675,  ratio: 2 }, // → 1080x1350
+    square: { w: 540, h: 540,  ratio: 2 }, // → 1080x1080
+    story:  { w: 540, h: 960,  ratio: 2 }, // → 1080x1920
+  };
+
   const exportPng = async (): Promise<Blob | null> => {
     if (!cardRef.current) return null;
-    const dataUrl = await toPng(cardRef.current, { pixelRatio: 2, cacheBust: true });
+    const cfg = SHARE_PIXELS[format];
+    const dataUrl = await toPng(cardRef.current, {
+      pixelRatio: cfg.ratio,
+      cacheBust: true,
+      canvasWidth: cfg.w,
+      canvasHeight: cfg.h,
+    });
     const res = await fetch(dataUrl);
     return await res.blob();
   };
@@ -62,7 +78,7 @@ const Index = () => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url; a.download = `purple-capsule-${capsule?.id ?? "memory"}.png`;
+      a.href = url; a.download = `arirang-capsule-${capsule?.id ?? "memory"}-${format}.png`;
       a.click();
       URL.revokeObjectURL(url);
       toast.success(t.toastSaved);
@@ -75,7 +91,7 @@ const Index = () => {
     try {
       const blob = await exportPng();
       if (!blob) return;
-      const file = new File([blob], `purple-capsule.png`, { type: "image/png" });
+      const file = new File([blob], `arirang-capsule.png`, { type: "image/png" });
       const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
       if (nav.canShare?.({ files: [file] })) {
         await navigator.share({ files: [file], title: t.shareTitle, text: t.shareText });
@@ -85,6 +101,9 @@ const Index = () => {
       }
     } catch { /* cancelled */ }
   };
+
+  // Calm motifs while composing (less distraction while typing)
+  const calmMotifs = step === "compose";
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -96,19 +115,17 @@ const Index = () => {
           style={{ backgroundImage: `url(${silk})`, backgroundSize: "cover", backgroundPosition: "center" }}
           aria-hidden="true"
         />
-        <BTSMotifs />
+        <BTSMotifs calm={calmMotifs} />
         <StarField count={70} />
         <div className="absolute inset-0 bg-glow" />
       </div>
 
       <header className="relative z-10 flex items-center justify-between px-6 py-5 md:px-10">
-        <button onClick={reset} className="font-serif text-lg tracking-wide text-foreground/90 hover:text-foreground transition">
-          {t.brand} <span className="text-gradient">Capsule</span> 💜
+        <button onClick={reset} className="hover:opacity-90 transition" aria-label="Home">
+          <ArirangMark />
         </button>
-        <div className="flex items-center gap-3">
-          <span className="hidden text-xs uppercase tracking-[0.3em] text-foreground/50 lg:block">
-            ARMY · Time Capsule
-          </span>
+        <div className="flex items-center gap-2">
+          <AudioToggle />
           <LangSwitcher />
         </div>
       </header>
@@ -125,6 +142,7 @@ const Index = () => {
         {step === "result" && capsule && (
           <Result
             capsule={capsule} cardRef={cardRef}
+            format={format} setFormat={setFormat}
             onDownload={handleDownload} onShare={handleShare}
             onRegenerate={regenerate} onReset={reset}
           />
@@ -263,16 +281,23 @@ const Compose = ({
 
 /* ---------- Result ---------- */
 const Result = ({
-  capsule, cardRef, onDownload, onShare, onRegenerate, onReset,
+  capsule, cardRef, format, setFormat, onDownload, onShare, onRegenerate, onReset,
 }: {
   capsule: Capsule;
   cardRef: React.RefObject<HTMLDivElement>;
+  format: CardFormat;
+  setFormat: (f: CardFormat) => void;
   onDownload: () => void;
   onShare: () => void;
   onRegenerate: () => void;
   onReset: () => void;
 }) => {
   const { t } = useI18n();
+  const formats: { id: CardFormat; label: string }[] = [
+    { id: "post",    label: t.shareSizeThreads },
+    { id: "square",  label: t.shareSizePost },
+    { id: "story",   label: t.shareSizeStory },
+  ];
   return (
     <div className="mx-auto max-w-6xl grid gap-12 pt-4 md:grid-cols-[1fr_1fr] md:items-center md:pt-8">
       <div className="order-2 md:order-1 animate-fade-up">
@@ -282,7 +307,33 @@ const Result = ({
         </h2>
         <p className="mt-5 max-w-lg text-foreground/70">{t.resultSub}</p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        {/* Format selector */}
+        <div className="mt-6">
+          <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-foreground/55">
+            {t.shareSizeLabel}
+          </div>
+          <div className="inline-flex flex-wrap gap-2 rounded-full border border-foreground/10 bg-foreground/5 p-1">
+            {formats.map(f => {
+              const active = format === f.id;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setFormat(f.id)}
+                  className={[
+                    "rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.2em] transition",
+                    active
+                      ? "bg-primary text-primary-foreground shadow-glow"
+                      : "text-foreground/70 hover:text-foreground hover:bg-foreground/5",
+                  ].join(" ")}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-3">
           <Button onClick={onDownload} size="lg" className="h-12 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 shadow-glow">
             <Download className="mr-2 h-4 w-4" /> {t.download}
           </Button>
@@ -308,7 +359,7 @@ const Result = ({
       </div>
 
       <div className="order-1 md:order-2 animate-scale-in">
-        <CapsuleCard ref={cardRef} capsule={capsule} />
+        <CapsuleCard ref={cardRef} capsule={capsule} format={format} />
       </div>
     </div>
   );
