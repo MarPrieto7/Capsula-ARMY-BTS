@@ -1,16 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * Original ambient pad inspired by Korean traditional textures (gayageum-like
- * plucks + airy daegeum pad). 100% synthesized via WebAudio — no copyrighted
- * audio. Off by default; toggling is gesture-driven so browsers allow it.
+ * Soft, looping ambient pad — slow, gentle, copyright-free.
+ * Pure WebAudio synthesis: warm sine layers + slow chord changes + airy
+ * reverb-ish noise wash. Designed to fade in/out, never spike, never click.
  */
 const STORAGE_KEY = "purple-capsule-audio";
+
+// Gentle Korean-flavored chord progression (Dm pent.) — long, slow.
+const CHORDS: number[][] = [
+  [146.83, 220.00, 261.63, 329.63], // Dm9-ish
+  [130.81, 196.00, 246.94, 293.66], // Cmaj9-ish
+  [164.81, 220.00, 246.94, 329.63], // soft suspension
+  [146.83, 196.00, 261.63, 349.23], // Dm add4
+];
 
 export function useAmbientAudio() {
   const [enabled, setEnabled] = useState(false);
   const ctxRef = useRef<AudioContext | null>(null);
-  const nodesRef = useRef<{ stop: () => void } | null>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     try {
@@ -20,82 +28,115 @@ export function useAmbientAudio() {
   }, []);
 
   const start = useCallback(() => {
-    if (nodesRef.current) return;
+    if (cleanupRef.current) return;
     const AC = window.AudioContext || (window as any).webkitAudioContext;
     if (!AC) return;
     const ctx = new AC();
     ctxRef.current = ctx;
 
+    // Master with very slow fade-in
     const master = ctx.createGain();
     master.gain.value = 0;
     master.connect(ctx.destination);
-    master.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 2.5);
+    master.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 5);
 
-    // Pentatonic Korean-style scale (D minor pentatonic-ish)
-    const scale = [146.83, 174.61, 196.00, 220.00, 261.63, 293.66, 329.63];
+    // Soft lowpass — keeps everything warm and dark
+    const warm = ctx.createBiquadFilter();
+    warm.type = "lowpass";
+    warm.frequency.value = 1100;
+    warm.Q.value = 0.4;
+    warm.connect(master);
 
-    // Pad layer — two detuned saws through lowpass
-    const pad = ctx.createGain();
-    pad.gain.value = 0.5;
-    const filter = ctx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 800;
-    filter.Q.value = 0.7;
-    pad.connect(filter).connect(master);
+    // 4 sine voices (one per chord note)
+    const voices = [0, 1, 2, 3].map(() => {
+      const o = ctx.createOscillator();
+      o.type = "sine";
+      const g = ctx.createGain();
+      g.gain.value = 0;
+      o.connect(g).connect(warm);
+      o.start();
+      return { o, g };
+    });
 
-    const o1 = ctx.createOscillator(); o1.type = "sine";    o1.frequency.value = scale[0];
-    const o2 = ctx.createOscillator(); o2.type = "triangle"; o2.frequency.value = scale[2] / 2;
-    const o3 = ctx.createOscillator(); o3.type = "sine";    o3.frequency.value = scale[4];
-    o1.connect(pad); o2.connect(pad); o3.connect(pad);
-    o1.start(); o2.start(); o3.start();
+    // Sub-octave sine for grounding
+    const sub = ctx.createOscillator();
+    sub.type = "sine";
+    const subG = ctx.createGain();
+    subG.gain.value = 0.04;
+    sub.connect(subG).connect(warm);
+    sub.start();
 
-    // Slow LFO on filter for breathing
-    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.07;
-    const lfoGain = ctx.createGain(); lfoGain.gain.value = 350;
-    lfo.connect(lfoGain).connect(filter.frequency);
+    // Airy noise wash — quiet, filtered noise for "breath"
+    const bufSize = 2 * ctx.sampleRate;
+    const noiseBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data = noiseBuf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * 0.5;
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuf;
+    noise.loop = true;
+    const noiseFilter = ctx.createBiquadFilter();
+    noiseFilter.type = "bandpass";
+    noiseFilter.frequency.value = 900;
+    noiseFilter.Q.value = 0.6;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.value = 0.012;
+    noise.connect(noiseFilter).connect(noiseGain).connect(master);
+    noise.start();
+
+    // Very slow LFO breathing on filter
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 0.04; // ~25s cycle
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.value = 180;
+    lfo.connect(lfoGain).connect(warm.frequency);
     lfo.start();
 
-    // Sparse pluck — gayageum style
-    let plucking = true;
-    const pluck = () => {
-      if (!plucking) return;
+    // Chord scheduler — crossfade every 8s
+    let chordIndex = 0;
+    const setChord = (idx: number, fadeSec: number) => {
+      const chord = CHORDS[idx % CHORDS.length];
       const t = ctx.currentTime;
-      const note = scale[Math.floor(Math.random() * scale.length)] * (Math.random() < 0.3 ? 2 : 1);
-      const osc = ctx.createOscillator();
-      osc.type = "triangle";
-      osc.frequency.value = note;
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.18, t + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 2.4);
-      const f = ctx.createBiquadFilter();
-      f.type = "lowpass";
-      f.frequency.value = 2400;
-      osc.connect(f).connect(g).connect(master);
-      osc.start(t);
-      osc.stop(t + 2.6);
-      const next = 2.2 + Math.random() * 3.5;
-      setTimeout(pluck, next * 1000);
+      voices.forEach((v, i) => {
+        const target = chord[i] ?? chord[chord.length - 1];
+        // Smooth frequency glide
+        v.o.frequency.cancelScheduledValues(t);
+        v.o.frequency.setValueAtTime(v.o.frequency.value, t);
+        v.o.frequency.linearRampToValueAtTime(target, t + fadeSec);
+        // Gentle amplitude with slight per-voice offset
+        v.g.gain.cancelScheduledValues(t);
+        v.g.gain.linearRampToValueAtTime(0.18 + i * 0.02, t + fadeSec);
+      });
+      // Sub follows the root, one octave below
+      sub.frequency.cancelScheduledValues(t);
+      sub.frequency.linearRampToValueAtTime(chord[0] / 2, t + fadeSec);
     };
-    setTimeout(pluck, 1200);
+    setChord(0, 4);
 
-    nodesRef.current = {
-      stop: () => {
-        plucking = false;
-        try {
-          master.gain.cancelScheduledValues(ctx.currentTime);
-          master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.6);
-          setTimeout(() => {
-            try { o1.stop(); o2.stop(); o3.stop(); lfo.stop(); ctx.close(); } catch {}
-          }, 700);
-        } catch {}
-      },
+    const interval = window.setInterval(() => {
+      chordIndex++;
+      setChord(chordIndex, 6);
+    }, 8000);
+
+    cleanupRef.current = () => {
+      clearInterval(interval);
+      try {
+        const t = ctx.currentTime;
+        master.gain.cancelScheduledValues(t);
+        master.gain.linearRampToValueAtTime(0, t + 1.2);
+        setTimeout(() => {
+          try {
+            voices.forEach(v => v.o.stop());
+            sub.stop(); lfo.stop(); noise.stop();
+            ctx.close();
+          } catch { /* noop */ }
+        }, 1400);
+      } catch { /* noop */ }
     };
   }, []);
 
   const stop = useCallback(() => {
-    nodesRef.current?.stop();
-    nodesRef.current = null;
+    cleanupRef.current?.();
+    cleanupRef.current = null;
     ctxRef.current = null;
   }, []);
 
