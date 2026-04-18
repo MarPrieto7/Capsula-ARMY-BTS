@@ -62,6 +62,11 @@ export type Dict = {
   shareText: string;
   audioOn: string;
   audioOff: string;
+  historyTitle: string;
+  historySub: string;
+  historyEmpty: string;
+  historyClear: string;
+  scanQR: string;
   moods: Record<string, string>;
 };
 
