@@ -1,9 +1,12 @@
-// All curated content — no DB needed. Quotes are original (inspired by ARMY spirit), not copyrighted lyrics.
+// All curated content — original phrases inspired by the spirit of BTS songs.
+// Song titles are referenced (nominative use, public information).
+// NO copyrighted lyrics are reproduced — every "lyricInspired" line is an original
+// composition written for this app, only evoking each song's mood.
 export type Mood = {
   id: string;
   label: string;
   emoji: string;
-  hue: number; // for subtle accent variation
+  hue: number;
 };
 
 export const MOODS: Mood[] = [
@@ -15,7 +18,7 @@ export const MOODS: Mood[] = [
   { id: "motivated", label: "Motivated", emoji: "🔥", hue: 20 },
 ];
 
-// Original inspirational phrases — written for this app, not lyrics.
+// Original phrases — written for this app, not lyrics.
 export const PHRASES: Record<string, string[]> = {
   happy: [
     "Your smile is the kind of light that makes the whole world bloom.",
@@ -49,8 +52,44 @@ export const PHRASES: Record<string, string[]> = {
   ],
 };
 
-// Suggested track *titles* only — generic, no copyrighted lyrics.
-// User asked NOT to include actual songs, so we keep this as soft "vibes".
+// Song-inspired lines — ORIGINAL writing evoking the spirit of real BTS songs.
+// Titles are factual references; the "line" text is newly written, not copied.
+export type SongInspired = { line: string; song: string; album: string };
+
+export const SONG_INSPIRED: Record<string, SongInspired[]> = {
+  happy: [
+    { line: "Even on the darkest highway, dynamite waits inside you.",     song: "Dynamite",        album: "BE (2020)" },
+    { line: "The world keeps turning, and so does our small joy.",         song: "Permission to Dance", album: "Butter (2021)" },
+    { line: "Boy with luv learns to love himself first — softly.",         song: "Boy With Luv",    album: "Map of the Soul: Persona (2019)" },
+  ],
+  sad: [
+    { line: "Spring days come back, even when winter forgets us.",         song: "Spring Day",      album: "You Never Walk Alone (2017)" },
+    { line: "The fake love we carried was teaching us what real love is.", song: "Fake Love",       album: "Love Yourself: Tear (2018)" },
+    { line: "Our blood, sweat and tears wrote a softer song than we knew.",song: "Blood Sweat & Tears", album: "Wings (2016)" },
+  ],
+  hopeful: [
+    { line: "Tomorrow is a quiet promise the night keeps for you.",        song: "Tomorrow",        album: "Skool Luv Affair (2014)" },
+    { line: "Answer: love yourself — that's where the morning begins.",    song: "Answer: Love Myself", album: "Love Yourself: Answer (2018)" },
+    { line: "The magic shop inside you is always open — just knock.",      song: "Magic Shop",      album: "Love Yourself: Tear (2018)" },
+  ],
+  nostalgic: [
+    { line: "The moon still hums the lullabies we forgot we knew.",        song: "Moon",            album: "BE (2020)" },
+    { line: "Euphoria is remembering the day we became ourselves.",        song: "Euphoria",        album: "Love Yourself: Answer (2018)" },
+    { line: "Every spring day, the past sends us a paper plane.",          song: "Spring Day",      album: "You Never Walk Alone (2017)" },
+  ],
+  lost: [
+    { line: "Lost between mirrors, you'll still find your own face waiting.",song: "Lost",          album: "Love Yourself: Her (2017)" },
+    { line: "Black swans pass — your dance does not end with them.",       song: "Black Swan",      album: "Map of the Soul: 7 (2020)" },
+    { line: "The sea inside you is wide enough to hold every doubt.",      song: "Sea",             album: "Love Yourself: Her (2017)" },
+  ],
+  motivated: [
+    { line: "Not today — today we burn quietly toward the sun.",            song: "Not Today",       album: "You Never Walk Alone (2017)" },
+    { line: "Mic drop softly: the work you did in silence speaks now.",    song: "Mic Drop",        album: "Love Yourself: Her (2017)" },
+    { line: "Run, even when the road runs out — make a new one.",          song: "Run",             album: "The Most Beautiful Moment in Life Pt.2 (2015)" },
+  ],
+};
+
+// Vibe titles (original ambient names — NOT BTS songs).
 export const VIBES: Record<string, string[]> = {
   happy:     ["Sunrise in Seoul", "Lavender Skies", "Dance of Tiny Joys"],
   sad:       ["Rain on Han River", "Quiet Letters", "Soft Goodbyes"],
@@ -72,6 +111,7 @@ export function generateCapsule(moodId: string, message: string) {
   return {
     mood,
     phrase: pick(PHRASES[mood.id]),
+    song: pick(SONG_INSPIRED[mood.id]),
     vibe: pick(VIBES[mood.id]),
     message: message.trim(),
     date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
