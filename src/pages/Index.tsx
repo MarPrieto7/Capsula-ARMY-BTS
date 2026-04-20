@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { toPng } from "html-to-image";
-import { Download, Share2, RefreshCw, ArrowRight, Sparkles } from "lucide-react";
+import { Download, RefreshCw, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import StarField from "@/components/StarField";
 import BTSMotifs from "@/components/BTSMotifs";
+import HangulBrush from "@/components/HangulBrush";
 import CapsuleCard, { type CardFormat } from "@/components/CapsuleCard";
 import LangSwitcher from "@/components/LangSwitcher";
-import AudioToggle from "@/components/AudioToggle";
 import ArirangMark from "@/components/ArirangMark";
 import CapsuleHistory from "@/components/CapsuleHistory";
 import { useCapsuleHistory } from "@/hooks/useCapsuleHistory";
@@ -15,7 +15,7 @@ import { MOODS, generateCapsule, sanitize, type Capsule } from "@/data/capsule";
 import { useI18n } from "@/hooks/useI18n";
 import hero from "@/assets/hero-arirang.jpg";
 import silk from "@/assets/silk-purple.jpg";
-import silhouette from "@/assets/silhouette-night.jpg";
+import composeArt from "@/assets/army-compose.jpg";
 
 type Step = "intro" | "compose" | "result";
 
@@ -31,13 +31,22 @@ const Index = () => {
 
   // SEO — refresh on language change
   useEffect(() => {
-    document.title = `${t.brand} Capsule 💜 — ${t.tagline}`;
-    const setMeta = (name: string, content: string) => {
-      let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
-      if (!el) { el = document.createElement("meta"); el.name = name; document.head.appendChild(el); }
+    document.title = `ARMY Capsule 💜 — ${t.tagline}`;
+    const setMeta = (name: string, content: string, attr: "name" | "property" = "name") => {
+      let el = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
       el.content = content;
     };
     setMeta("description", t.heroSub);
+    setMeta("og:title", `ARMY Capsule 💜 — ${t.tagline}`, "property");
+    setMeta("og:description", t.heroSub, "property");
+    setMeta("twitter:title", `ARMY Capsule 💜 — ${t.tagline}`);
+    setMeta("twitter:description", t.heroSub);
+
     let canon = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canon) { canon = document.createElement("link"); canon.rel = "canonical"; document.head.appendChild(canon); }
     canon.href = window.location.origin + "/";
@@ -91,28 +100,13 @@ const Index = () => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url; a.download = `arirang-capsule-${capsule?.id ?? "memory"}-${format}.png`;
+      a.href = url; a.download = `army-capsule-${capsule?.id ?? "memory"}-${format}.png`;
       a.click();
       URL.revokeObjectURL(url);
       toast.success(t.toastSaved);
     } catch {
       toast.error(t.toastError);
     }
-  };
-
-  const handleShare = async () => {
-    try {
-      const blob = await exportPng();
-      if (!blob) return;
-      const file = new File([blob], `arirang-capsule.png`, { type: "image/png" });
-      const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
-      if (nav.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: t.shareTitle, text: t.shareText });
-      } else {
-        await handleDownload();
-        toast(t.toastShareFallback);
-      }
-    } catch { /* cancelled */ }
   };
 
   // Calm motifs while composing (less distraction while typing)
@@ -130,6 +124,10 @@ const Index = () => {
         />
         <BTSMotifs calm={calmMotifs} />
         <StarField count={70} />
+        {/* Slow self-drawing hangul calligraphy */}
+        <div className="absolute inset-x-0 top-1/3 h-[40vh] opacity-60">
+          <HangulBrush />
+        </div>
         <div className="absolute inset-0 bg-glow" />
       </div>
 
@@ -139,7 +137,6 @@ const Index = () => {
         </button>
         <div className="flex items-center gap-2">
           <CapsuleHistory history={history} onOpen={openFromHistory} onClear={clearHistory} />
-          <AudioToggle />
           <LangSwitcher />
         </div>
       </header>
@@ -157,7 +154,7 @@ const Index = () => {
           <Result
             capsule={capsule} cardRef={cardRef}
             format={format} setFormat={setFormat}
-            onDownload={handleDownload} onShare={handleShare}
+            onDownload={handleDownload}
             onRegenerate={regenerate} onReset={reset}
           />
         )}
@@ -196,7 +193,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
         <ul className="mt-12 grid grid-cols-3 gap-4 text-xs text-foreground/60">
           <li><span className="block text-gold-soft/90 font-serif text-2xl">3</span>{t.steps}</li>
           <li><span className="block text-gold-soft/90 font-serif text-2xl">∞</span>{t.capsules}</li>
-          <li><span className="block text-gold-soft/90 font-serif text-2xl">0</span>{t.noData}</li>
+          <li><span className="block text-gold-soft/90 font-serif text-2xl">7</span>보라해</li>
         </ul>
       </div>
 
@@ -233,12 +230,24 @@ const Compose = ({
 }) => {
   const { t } = useI18n();
   return (
-    <div className="mx-auto max-w-3xl pt-6 md:pt-10 animate-fade-up">
-      <p className="mb-3 text-center text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.composeStep}</p>
-      <h2 className="text-center font-serif text-4xl md:text-5xl">{t.composeTitle}</h2>
-      <p className="mt-3 text-center text-sm text-foreground/65">{t.composeSub}</p>
+    <div className="mx-auto max-w-3xl pt-6 md:pt-10 animate-fade-up text-center">
+      {/* ARMY-themed hero image for the compose step */}
+      <div className="mx-auto mb-8 overflow-hidden rounded-3xl shadow-soft max-w-md">
+        <img
+          src={composeArt}
+          alt="A silhouette under a purple moon and seven stars — ARMY constellation"
+          width={1080}
+          height={1920}
+          loading="lazy"
+          className="h-48 w-full object-cover md:h-56"
+        />
+      </div>
 
-      <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <p className="mb-3 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.composeStep}</p>
+      <h2 className="font-serif text-4xl md:text-5xl">{t.composeTitle}</h2>
+      <p className="mt-3 text-sm text-foreground/65">{t.composeSub}</p>
+
+      <div className="mx-auto mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 text-left">
         {MOODS.map(m => {
           const active = mood === m.id;
           return (
@@ -261,7 +270,7 @@ const Compose = ({
         })}
       </div>
 
-      <div className="mt-12">
+      <div className="mt-12 text-left">
         <label className="mb-3 block text-xs uppercase tracking-[0.3em] text-foreground/60">
           {t.whisperLabel} <span className="text-foreground/40 normal-case tracking-normal">{t.whisperOptional}</span>
         </label>
@@ -295,14 +304,13 @@ const Compose = ({
 
 /* ---------- Result ---------- */
 const Result = ({
-  capsule, cardRef, format, setFormat, onDownload, onShare, onRegenerate, onReset,
+  capsule, cardRef, format, setFormat, onDownload, onRegenerate, onReset,
 }: {
   capsule: Capsule;
   cardRef: React.RefObject<HTMLDivElement>;
   format: CardFormat;
   setFormat: (f: CardFormat) => void;
   onDownload: () => void;
-  onShare: () => void;
   onRegenerate: () => void;
   onReset: () => void;
 }) => {
@@ -314,19 +322,19 @@ const Result = ({
   ];
   return (
     <div className="mx-auto max-w-6xl grid gap-12 pt-4 md:grid-cols-[1fr_1fr] md:items-center md:pt-8">
-      <div className="order-2 md:order-1 animate-fade-up">
+      <div className="order-2 md:order-1 animate-fade-up text-center md:text-left">
         <p className="mb-3 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.resultEyebrow}</p>
         <h2 className="font-serif text-4xl md:text-5xl">
           {t.resultTitle1}<br/><span className="text-gradient">{t.resultTitle2}</span>
         </h2>
-        <p className="mt-5 max-w-lg text-foreground/70">{t.resultSub}</p>
+        <p className="mt-5 mx-auto md:mx-0 max-w-lg text-foreground/70">{t.resultSub}</p>
 
         {/* Format selector */}
         <div className="mt-6">
           <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-foreground/55">
             {t.shareSizeLabel}
           </div>
-          <div className="inline-flex flex-wrap gap-2 rounded-full border border-foreground/10 bg-foreground/5 p-1">
+          <div className="inline-flex flex-wrap justify-center gap-2 rounded-full border border-foreground/10 bg-foreground/5 p-1">
             {formats.map(f => {
               const active = format === f.id;
               return (
@@ -347,14 +355,11 @@ const Result = ({
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
           <Button onClick={onDownload} size="lg" className="h-12 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 shadow-glow">
             <Download className="mr-2 h-4 w-4" /> {t.download}
           </Button>
-          <Button onClick={onShare} size="lg" variant="secondary" className="h-12 rounded-full bg-secondary/80 px-6 hover:bg-secondary">
-            <Share2 className="mr-2 h-4 w-4" /> {t.share}
-          </Button>
-          <Button onClick={onRegenerate} size="lg" variant="ghost" className="h-12 rounded-full px-6 text-foreground/80 hover:bg-foreground/5">
+          <Button onClick={onRegenerate} size="lg" variant="secondary" className="h-12 rounded-full bg-secondary/80 px-6 hover:bg-secondary">
             <RefreshCw className="mr-2 h-4 w-4" /> {t.regenerate}
           </Button>
         </div>
@@ -362,17 +367,9 @@ const Result = ({
         <button onClick={onReset} className="mt-8 text-xs uppercase tracking-[0.3em] text-foreground/50 hover:text-foreground/80 transition">
           {t.another}
         </button>
-
-        <div className="mt-12 hidden md:block">
-          <img
-            src={silhouette} alt="Silhouette under a starry purple sky"
-            width={1280} height={1600} loading="lazy"
-            className="h-40 w-full rounded-2xl object-cover opacity-70"
-          />
-        </div>
       </div>
 
-      <div className="order-1 md:order-2 animate-scale-in">
+      <div className="order-1 md:order-2 animate-scale-in flex justify-center">
         <CapsuleCard ref={cardRef} capsule={capsule} format={format} />
       </div>
     </div>
