@@ -1,33 +1,59 @@
 /**
- * Original wordmark inspired by the Arirang aesthetic — NOT the official HYBE logo.
- * Combines a stylized half-moon, a single mountain ridge and the words
- * "ARIRANG · CAPSULE" in serif + hangul "아리랑" beneath.
+ * Original "ARMY CAPSULE" wordmark — NOT an official HYBE/BTS logo.
+ * A delicate purple half-moon with a 7-star constellation (nod to the 7 members),
+ * paired with elegant serif typography and animated hangul "보라해" beneath.
  */
 const ArirangMark = ({ className = "" }: { className?: string }) => (
   <div className={`inline-flex items-center gap-3 ${className}`}>
-    <svg viewBox="0 0 48 48" className="h-8 w-8" aria-hidden="true">
+    <svg viewBox="0 0 56 56" className="h-9 w-9" aria-hidden="true">
       <defs>
         <linearGradient id="amg" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="hsl(var(--gold-soft))" />
-          <stop offset="100%" stopColor="hsl(var(--lavender))" />
+          <stop offset="0%" stopColor="hsl(var(--lavender))" />
+          <stop offset="100%" stopColor="hsl(var(--gold-soft))" />
         </linearGradient>
       </defs>
-      {/* Moon */}
-      <circle cx="24" cy="20" r="11" fill="none" stroke="url(#amg)" strokeWidth="1.2" />
-      <path d="M18 16 a 9 9 0 0 0 12 12" fill="none" stroke="url(#amg)" strokeWidth="1.2" />
-      {/* Mountain ridge */}
-      <path d="M4 40 L 16 28 L 24 34 L 34 24 L 44 40 Z"
-        fill="none" stroke="url(#amg)" strokeWidth="1.2" strokeLinejoin="round" />
+      {/* Half moon (crescent) */}
+      <path
+        d="M34 16 a 12 12 0 1 0 0 24 a 9 9 0 0 1 0 -24 z"
+        fill="url(#amg)" opacity="0.85"
+      />
+      {/* 7-star constellation arc */}
+      {[
+        [10, 10], [18, 8], [26, 12], [34, 6],
+        [42, 14], [48, 22], [44, 32],
+      ].map(([cx, cy], i) => (
+        <circle
+          key={i}
+          cx={cx} cy={cy} r="1.1"
+          fill="hsl(var(--gold-soft))"
+          opacity="0.9"
+        >
+          <animate
+            attributeName="opacity"
+            values="0.3;1;0.3"
+            dur={`${3 + (i % 3)}s`}
+            begin={`${i * 0.4}s`}
+            repeatCount="indefinite"
+          />
+        </circle>
+      ))}
+      {/* Connecting constellation lines */}
+      <path
+        d="M10 10 L18 8 L26 12 L34 6 L42 14 L48 22 L44 32"
+        stroke="hsl(var(--lavender) / 0.4)"
+        strokeWidth="0.4"
+        fill="none"
+      />
     </svg>
     <div className="leading-tight">
-      <div className="font-serif text-[13px] tracking-[0.45em] text-foreground/90">
-        ARIRANG · CAPSULE
+      <div className="font-serif text-[14px] tracking-[0.4em] text-foreground/95">
+        ARMY <span className="text-gradient">CAPSULE</span>
       </div>
       <div
-        className="text-[10px] tracking-[0.35em] text-gold-soft/80"
+        className="text-[10px] tracking-[0.4em] text-gold-soft/80 hangul-stroke"
         style={{ fontFamily: "'Noto Serif KR', serif" }}
       >
-        아리랑 · 보라해
+        보 라 해
       </div>
     </div>
   </div>
