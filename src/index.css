@@ -194,3 +194,29 @@
 .animate-fade-up { animation: fade-up 0.7s var(--transition-silk) both; }
 .animate-scale-in { animation: scale-in 0.5s var(--transition-silk) both; }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* Animated hangul calligraphy — letters fade and brighten in sequence,
+   evoking a brush stroke being written. */
+@keyframes hangul-glow {
+  0%, 100% { opacity: 0.45; text-shadow: 0 0 0 transparent; letter-spacing: 0.4em; }
+  50%      { opacity: 1;   text-shadow: 0 0 12px hsl(var(--violet-glow) / 0.8); letter-spacing: 0.45em; }
+}
+.hangul-stroke {
+  animation: hangul-glow 6s ease-in-out infinite;
+}
+
+/* Hangul brush-stroke draw animation for hero — uses stroke-dasharray */
+@keyframes brush-draw {
+  0%   { stroke-dashoffset: 1000; opacity: 0; }
+  10%  { opacity: 0.55; }
+  60%  { stroke-dashoffset: 0; opacity: 0.55; }
+  85%  { opacity: 0.55; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+.hangul-brush path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: brush-draw 14s ease-in-out infinite;
+}
+.hangul-brush path:nth-child(2) { animation-delay: 4s; }
+.hangul-brush path:nth-child(3) { animation-delay: 8s; }
