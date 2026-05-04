@@ -1,7 +1,7 @@
 // 3 visual variants for the capsule card. Selected randomly per generation.
 // Pure data — colors are HSL semantic tokens (no raw colors in components).
 export type CardVariant = {
-  id: "moonlit" | "sunset" | "hanji";
+  id: "moonlit" | "sunset" | "hanji" | "hanbok-silk" | "hanbok-norigae";
   // tailwind classes for the surface gradient
   surfaceClass: string;
   // glow tint over the top
@@ -41,6 +41,24 @@ export const CARD_VARIANTS: CardVariant[] = [
     ridgeFill2: "hsl(var(--gold-soft))",
     dancheongRotate: 45,
     dancheongOpacity: [0.10, 0.18],
+  },
+  {
+    id: "hanbok-silk",
+    surfaceClass: "bg-gradient-to-tr from-[hsl(285_60%_25%)] via-[hsl(270_55%_35%)] to-[hsl(45_55%_55%/0.4)]",
+    glowClass: "bg-gradient-to-b from-[hsl(45_70%_75%/0.18)] via-transparent to-[hsl(285_70%_45%/0.25)]",
+    ridgeFill1: "hsl(45 70% 75%)",
+    ridgeFill2: "hsl(285 60% 35%)",
+    dancheongRotate: 12,
+    dancheongOpacity: [0.22, 0.16],
+  },
+  {
+    id: "hanbok-norigae",
+    surfaceClass: "bg-gradient-to-bl from-[hsl(260_60%_22%)] via-[hsl(295_50%_30%)] to-[hsl(335_45%_30%)]",
+    glowClass: "bg-gradient-to-b from-[hsl(335_60%_70%/0.18)] to-transparent",
+    ridgeFill1: "hsl(45 70% 80%)",
+    ridgeFill2: "hsl(335 50% 35%)",
+    dancheongRotate: -20,
+    dancheongOpacity: [0.20, 0.14],
   },
 ];
 

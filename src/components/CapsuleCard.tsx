@@ -63,12 +63,9 @@ const CapsuleCard = forwardRef<HTMLDivElement, Props>(({ capsule, format = "post
       </svg>
 
       <div className={`relative z-10 flex h-full flex-col text-foreground ${isStory ? "p-6" : "p-7"}`}>
-        {/* Header — wordmark + ID */}
+        {/* Header — wordmark */}
         <div className="flex items-start justify-between">
           <ArirangMark />
-          <span className="text-[9px] uppercase tracking-[0.25em] text-foreground/50">
-            #{capsule.id}
-          </span>
         </div>
 
         {/* Mood */}

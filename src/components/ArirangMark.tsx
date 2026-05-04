@@ -3,9 +3,11 @@
  * A delicate purple half-moon with a 7-star constellation (nod to the 7 members),
  * paired with elegant serif typography and animated hangul "보라해" beneath.
  */
-const ArirangMark = ({ className = "" }: { className?: string }) => (
+const ArirangMark = ({ className = "", size = "md" }: { className?: string; size?: "md" | "lg" }) => {
+  const isLg = size === "lg";
+  return (
   <div className={`inline-flex items-center gap-3 ${className}`}>
-    <svg viewBox="0 0 56 56" className="h-9 w-9" aria-hidden="true">
+    <svg viewBox="0 0 56 56" className={isLg ? "h-14 w-14" : "h-9 w-9"} aria-hidden="true">
       <defs>
         <linearGradient id="amg" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0%" stopColor="hsl(var(--lavender))" />
@@ -46,17 +48,18 @@ const ArirangMark = ({ className = "" }: { className?: string }) => (
       />
     </svg>
     <div className="leading-tight">
-      <div className="font-serif text-[14px] tracking-[0.4em] text-foreground/95">
+      <div className={`font-serif tracking-[0.4em] text-foreground/95 ${isLg ? "text-[22px]" : "text-[14px]"}`}>
         ARMY <span className="text-gradient">CAPSULE</span>
       </div>
       <div
-        className="text-[10px] tracking-[0.4em] text-gold-soft/80 hangul-stroke"
+        className={`tracking-[0.4em] text-gold-soft/80 hangul-stroke ${isLg ? "text-[13px]" : "text-[10px]"}`}
         style={{ fontFamily: "'Noto Serif KR', serif" }}
       >
         보 라 해
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export default ArirangMark;
