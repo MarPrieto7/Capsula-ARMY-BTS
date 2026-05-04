@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import StarField from "@/components/StarField";
 import BTSMotifs from "@/components/BTSMotifs";
 import HangulBrush from "@/components/HangulBrush";
+import Constellation from "@/components/Constellation";
 import CapsuleCard, { type CardFormat } from "@/components/CapsuleCard";
 import LangSwitcher from "@/components/LangSwitcher";
 import ArirangMark from "@/components/ArirangMark";
@@ -133,7 +134,7 @@ const Index = () => {
 
       <header className="relative z-10 flex items-center justify-between px-6 py-5 md:px-10">
         <button onClick={reset} className="hover:opacity-90 transition" aria-label="Home">
-          <ArirangMark />
+          <ArirangMark size="lg" />
         </button>
         <div className="flex items-center gap-2">
           <CapsuleHistory history={history} onOpen={openFromHistory} onClear={clearHistory} />
@@ -190,11 +191,9 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           <span className="text-xs uppercase tracking-[0.25em] text-foreground/50">{t.underBtn}</span>
         </div>
 
-        <ul className="mt-12 grid grid-cols-3 gap-4 text-xs text-foreground/60">
-          <li><span className="block text-gold-soft/90 font-serif text-2xl">3</span>{t.steps}</li>
-          <li><span className="block text-gold-soft/90 font-serif text-2xl">∞</span>{t.capsules}</li>
-          <li><span className="block text-gold-soft/90 font-serif text-2xl">7</span>보라해</li>
-        </ul>
+        <div className="mt-12">
+          <Constellation size={520} showLabel className="w-full max-w-xl" />
+        </div>
       </div>
 
       <div className="relative animate-scale-in">
