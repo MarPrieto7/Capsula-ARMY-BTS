@@ -171,6 +171,12 @@ const Index = () => {
 /* ---------- Intro ---------- */
 const Intro = ({ onStart }: { onStart: () => void }) => {
   const { t } = useI18n();
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
     <div className="mx-auto grid max-w-6xl gap-10 pt-6 md:grid-cols-[1.1fr_0.9fr] md:gap-16 md:pt-10">
       <div className="flex flex-col justify-center animate-fade-up">
@@ -191,7 +197,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           <span className="text-xs uppercase tracking-[0.25em] text-foreground/50">{t.underBtn}</span>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-12 flex justify-center md:justify-start">
           <Constellation size={520} showLabel className="w-full max-w-xl" />
         </div>
       </div>
@@ -202,7 +208,22 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             src={hero} alt="Purple moonlit Korean mountains — Arirang inspired"
             width={1920} height={1280}
             className="h-[420px] w-full object-cover md:h-[560px]"
+            style={{ transform: `translateY(${scrollY * 0.15}px) scale(1.05)` }}
           />
+          {/* Parallax moon */}
+          <div
+            className="absolute right-10 top-10 h-24 w-24 rounded-full bg-gradient-to-br from-[hsl(var(--lavender))] to-[hsl(var(--gold-soft))] opacity-80 blur-[2px] shadow-glow"
+            style={{ transform: `translateY(${scrollY * -0.25}px)` }}
+            aria-hidden="true"
+          />
+          {/* Parallax stars overlay */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ transform: `translateY(${scrollY * -0.4}px)` }}
+            aria-hidden="true"
+          >
+            <StarField count={30} />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
           <div className="absolute bottom-6 left-6 right-6">
             <p className="font-serif text-xl text-foreground/95 md:text-2xl">
@@ -230,16 +251,9 @@ const Compose = ({
   const { t } = useI18n();
   return (
     <div className="mx-auto max-w-3xl pt-6 md:pt-10 animate-fade-up text-center">
-      {/* ARMY-themed hero image for the compose step */}
-      <div className="mx-auto mb-8 overflow-hidden rounded-3xl shadow-soft max-w-md">
-        <img
-          src={composeArt}
-          alt="A silhouette under a purple moon and seven stars — ARMY constellation"
-          width={1080}
-          height={1920}
-          loading="lazy"
-          className="h-48 w-full object-cover md:h-56"
-        />
+      {/* Large 7-star ARMY constellation for the compose step */}
+      <div className="mx-auto mb-6 max-w-xl">
+        <Constellation size={560} showLabel className="w-full" />
       </div>
 
       <p className="mb-3 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.composeStep}</p>
