@@ -116,7 +116,7 @@ export const DICT: Record<Lang, Dict> = {
     brand: "Purple", tagline: "Una experiencia de memoria púrpura",
     heroEyebrow: "Una experiencia de memoria púrpura",
     heroTitle1: "Crea tu", heroTitle2: "cápsula del tiempo BTS",
-    heroSub: "Un refugio silencioso para ARMY. Elige una emoción, escribe un susurro a tu yo del futuro y séllalo en un recuerdo púrpura — tuyo para guardar, tuyo para compartir.",
+    heroSub: "Un refugio silencioso para ARMY. Elige una emoción, escribe un susurro a tu yo del futuro y séllalo en un recuerdo púrpura... ese susurro será tuyo para guardar y para compartirlo.",
     start: "Empezar", underBtn: "Menos de 60 segundos · Sin registro",
     steps: "pasos simples", capsules: "cápsulas", noData: "datos guardados",
     heroQuote1: "Más allá de las montañas, más montañas —", heroQuote2: "y más allá de ellas, tú.",
