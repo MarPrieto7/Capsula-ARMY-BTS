@@ -9,15 +9,16 @@ interface Props {
   label?: string;
 }
 
+// Big Dipper (북두칠성) — the seven-star asterism evoked by Arirang's cover art.
 const STARS: [number, number, number][] = [
-  // [cx, cy, r]
-  [60, 90, 3.2],
-  [130, 50, 4.0],
-  [210, 80, 3.0],
-  [290, 40, 4.6],
-  [360, 90, 3.4],
-  [430, 60, 3.0],
-  [490, 130, 3.8],
+  // [cx, cy, r]  — bowl + handle of the Dipper
+  [80, 130, 3.6],   // Dubhe
+  [150, 110, 3.2],  // Merak
+  [200, 150, 3.0],  // Phecda
+  [250, 130, 3.4],  // Megrez
+  [330, 100, 4.2],  // Alioth
+  [410, 70, 3.4],   // Mizar
+  [490, 50, 4.6],   // Alkaid
 ];
 
 const Constellation = ({ className = "", size = 540, showLabel = false, label = "보 라 해" }: Props) => {

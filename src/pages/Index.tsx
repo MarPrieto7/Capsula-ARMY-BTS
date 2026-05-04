@@ -14,7 +14,7 @@ import CapsuleHistory from "@/components/CapsuleHistory";
 import { useCapsuleHistory } from "@/hooks/useCapsuleHistory";
 import { MOODS, generateCapsule, sanitize, type Capsule } from "@/data/capsule";
 import { useI18n } from "@/hooks/useI18n";
-import hero from "@/assets/hero-arirang.jpg";
+import hero from "@/assets/army-hero-silhouettes.jpg";
 import silk from "@/assets/silk-purple.jpg";
 import composeArt from "@/assets/army-compose.jpg";
 
