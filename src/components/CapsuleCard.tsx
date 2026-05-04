@@ -1,5 +1,5 @@
-import { forwardRef, useEffect, useState } from "react";
-import QRCode from "qrcode";
+import { forwardRef } from "react";
+import Constellation from "@/components/Constellation";
 import type { Capsule } from "@/data/capsule";
 import { useI18n } from "@/hooks/useI18n";
 import dancheong from "@/assets/dancheong.png";
@@ -27,16 +27,6 @@ const CapsuleCard = forwardRef<HTMLDivElement, Props>(({ capsule, format = "post
   const isStory = format === "story";
   const v = variant ?? pickVariant(capsule.id);
 
-  // Generate QR code data URL pointing back to the site
-  const [qrUrl, setQrUrl] = useState<string>("");
-  useEffect(() => {
-    const url = typeof window !== "undefined" ? window.location.origin + "/" : "https://arirang-capsule.app/";
-    QRCode.toDataURL(url, {
-      margin: 0,
-      width: 160,
-      color: { dark: "#1a0d2e", light: "#f4ecd8" },
-    }).then(setQrUrl).catch(() => setQrUrl(""));
-  }, []);
 
   return (
     <div
@@ -111,20 +101,13 @@ const CapsuleCard = forwardRef<HTMLDivElement, Props>(({ capsule, format = "post
               <div className="font-serif text-sm text-foreground/90">{capsule.date}</div>
             </div>
 
-            {/* QR code */}
-            {qrUrl && (
-              <div className="flex flex-col items-center gap-1 shrink-0">
-                <div className="rounded-lg bg-[hsl(var(--gold-soft)/0.95)] p-1.5">
-                  <img
-                    src={qrUrl} alt="QR code"
-                    className={isStory ? "h-12 w-12" : "h-14 w-14"}
-                  />
-                </div>
-                <div className="text-[7px] uppercase tracking-[0.25em] text-foreground/55 text-center max-w-[80px] leading-tight">
-                  {t.scanQR}
-                </div>
+            {/* 7-star constellation — same as the ARMY Capsule mark */}
+            <div className="flex flex-col items-center gap-1 shrink-0">
+              <Constellation size={isStory ? 96 : 120} />
+              <div className="text-[7px] uppercase tracking-[0.3em] text-foreground/55">
+                보 라 해
               </div>
-            )}
+            </div>
           </div>
           <p className="mt-4 text-center text-[9px] uppercase tracking-[0.35em] text-foreground/55">
             {t.cardMade}
