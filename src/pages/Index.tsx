@@ -11,6 +11,7 @@ import CapsuleCard, { type CardFormat } from "@/components/CapsuleCard";
 import LangSwitcher from "@/components/LangSwitcher";
 import ArirangMark from "@/components/ArirangMark";
 import CapsuleHistory from "@/components/CapsuleHistory";
+import AmbientAudio from "@/components/AmbientAudio";
 import { useCapsuleHistory } from "@/hooks/useCapsuleHistory";
 import { MOODS, generateCapsule, sanitize, type Capsule } from "@/data/capsule";
 import { useI18n } from "@/hooks/useI18n";
@@ -137,6 +138,7 @@ const Index = () => {
           <ArirangMark size="lg" />
         </button>
         <div className="flex items-center gap-2">
+          <AmbientAudio />
           <CapsuleHistory history={history} onOpen={openFromHistory} onClear={clearHistory} />
           <LangSwitcher />
         </div>
