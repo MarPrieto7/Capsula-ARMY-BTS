@@ -70,8 +70,12 @@ export type Dict = {
   moods: Record<string, string>;
 };
 
-const baseMoods = (h: string, s: string, ho: string, n: string, l: string, m: string) => ({
+const baseMoods = (
+  h: string, s: string, ho: string, n: string, l: string, m: string,
+  g: string, lv: string, a: string, p: string,
+) => ({
   happy: h, sad: s, hopeful: ho, nostalgic: n, lost: l, motivated: m,
+  grateful: g, loved: lv, anxious: a, peaceful: p,
 });
 
 export const DICT: Record<Lang, Dict> = {
