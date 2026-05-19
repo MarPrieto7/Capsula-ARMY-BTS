@@ -16,6 +16,10 @@ export const MOODS: Mood[] = [
   { id: "nostalgic", label: "Nostalgic", emoji: "🌙", hue: 260 },
   { id: "lost",      label: "Lost",      emoji: "🌫",  hue: 240 },
   { id: "motivated", label: "Motivated", emoji: "🔥", hue: 20 },
+  { id: "grateful",  label: "Grateful",  emoji: "🌸", hue: 320 },
+  { id: "loved",     label: "Loved",     emoji: "💜", hue: 290 },
+  { id: "anxious",   label: "Anxious",   emoji: "🌊", hue: 200 },
+  { id: "peaceful",  label: "Peaceful",  emoji: "🕊", hue: 180 },
 ];
 
 // Original phrases — written for this app, not lyrics.
@@ -49,6 +53,26 @@ export const PHRASES: Record<string, string[]> = {
     "Burn slowly, but burn for what is yours.",
     "Your dream does not need permission. Only patience.",
     "Today is a beginning written in violet ink.",
+  ],
+  grateful: [
+    "Thank you, quiet hands that held me when I forgot how.",
+    "Even the smallest kindness today is enough to write home about.",
+    "Gratitude is the softest kind of light — and it suits you.",
+  ],
+  loved: [
+    "You are loved in seven different languages tonight.",
+    "Some hearts find each other across oceans, eras, and songs.",
+    "To be loved is to be remembered, even in your silences.",
+  ],
+  anxious: [
+    "Breathe. The world can wait one more violet second.",
+    "Your storm is not your home — it's only passing through.",
+    "Soft hands, soft mind. The tide will return what it took.",
+  ],
+  peaceful: [
+    "Stillness is its own kind of song.",
+    "The moon doesn't rush, and neither must you.",
+    "Tonight, let your bones rest. The stars are keeping watch.",
   ],
 };
 
@@ -87,6 +111,26 @@ export const SONG_INSPIRED: Record<string, SongInspired[]> = {
     { line: "Mic drop softly: the work you did in silence speaks now.",    song: "Mic Drop",        album: "Love Yourself: Her (2017)" },
     { line: "Run, even when the road runs out — make a new one.",          song: "Run",             album: "The Most Beautiful Moment in Life Pt.2 (2015)" },
   ],
+  grateful: [
+    { line: "Two! Three! — and the whole world says thank you back.",      song: "2!3!",            album: "Wings (2016)" },
+    { line: "Mikrokosmos: every small light is someone saying thank you.", song: "Mikrokosmos",     album: "Map of the Soul: Persona (2019)" },
+    { line: "Pied Piper teaches us to be thankful for the songs that found us.", song: "Pied Piper", album: "Love Yourself: Her (2017)" },
+  ],
+  loved: [
+    { line: "Serendipity — the universe was always going to bring us here.", song: "Serendipity",  album: "Love Yourself: Her (2017)" },
+    { line: "I need u, and the violet stays even when the words don't.",   song: "I Need U",        album: "The Most Beautiful Moment in Life Pt.1 (2015)" },
+    { line: "Boy with luv keeps choosing softness — and so do you.",       song: "Boy With Luv",    album: "Map of the Soul: Persona (2019)" },
+  ],
+  anxious: [
+    { line: "The truth untold is safe with the moon for one more night.",  song: "The Truth Untold",album: "Love Yourself: Tear (2018)" },
+    { line: "Fake love taught us how to listen to the real one inside.",   song: "Fake Love",       album: "Love Yourself: Tear (2018)" },
+    { line: "Outro: Tear softly — and the morning will still come.",       song: "Outro: Tear",     album: "Love Yourself: Tear (2018)" },
+  ],
+  peaceful: [
+    { line: "Life goes on, quietly, like rain on a violet rooftop.",       song: "Life Goes On",    album: "BE (2020)" },
+    { line: "Stay tonight — the silence is wide enough for both of us.",   song: "Stay",            album: "BE (2020)" },
+    { line: "The moon hums, and you are allowed to rest.",                  song: "Moon",            album: "BE (2020)" },
+  ],
 };
 
 // Vibe titles (original ambient names — NOT BTS songs).
@@ -97,6 +141,10 @@ export const VIBES: Record<string, string[]> = {
   nostalgic: ["Old Polaroids", "Moonlit Hallway", "Echoes of 2013"],
   lost:      ["Between Stars", "Unwritten Map", "Drifting Violet"],
   motivated: ["Rise Anthem", "Embers & Gold", "Run Toward It"],
+  grateful:  ["Soft Bow", "Small Light, Big Heart", "Thank You Letter"],
+  loved:     ["Violet Embrace", "Seven Stars, One Heart", "Borahae Lullaby"],
+  anxious:   ["Held Breath", "Tide at 3am", "Soft Static"],
+  peaceful:  ["Slow Snowfall", "Tea & Moonlight", "After the Rain"],
 };
 
 export function pick<T>(arr: T[], seed?: number): T {
