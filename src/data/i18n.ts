@@ -114,7 +114,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "Your capsules", historySub: "The last 5 capsules you sealed — kept only on this device.",
     historyEmpty: "No capsules yet. Seal your first one 💜", historyClear: "Clear history",
     scanQR: "Scan to make yours",
-    moods: baseMoods("Happy","Sad","Hopeful","Nostalgic","Lost","Motivated"),
+    moods: baseMoods("Happy","Sad","Hopeful","Nostalgic","Lost","Motivated","Grateful","Loved","Anxious","Peaceful"),
   },
   es: {
     brand: "Purple", tagline: "Una experiencia de memoria púrpura",
@@ -151,7 +151,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "Tus cápsulas", historySub: "Las últimas 5 cápsulas que sellaste — solo en este dispositivo.",
     historyEmpty: "Aún no hay cápsulas. Sella tu primera 💜", historyClear: "Borrar historial",
     scanQR: "Escanea para crear la tuya",
-    moods: baseMoods("Feliz","Triste","Esperanzada","Nostálgica","Perdida","Motivada"),
+    moods: baseMoods("Feliz","Triste","Esperanzada","Nostálgica","Perdida","Motivada","Agradecida","Querida","Ansiosa","En paz"),
   },
   "es-419": {
     brand: "Purple", tagline: "Una experiencia de memoria púrpura",
@@ -188,7 +188,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "Tus cápsulas", historySub: "Las últimas 5 cápsulas que sellaste — solo en este dispositivo.",
     historyEmpty: "Aún no hay cápsulas. Sellá tu primera 💜", historyClear: "Borrar historial",
     scanQR: "Escaneá para crear la tuya",
-    moods: baseMoods("Feliz","Triste","Esperanzada","Nostálgica","Perdida","Motivada"),
+    moods: baseMoods("Feliz","Triste","Esperanzada","Nostálgica","Perdida","Motivada","Agradecida","Querida","Ansiosa","En paz"),
   },
   pt: {
     brand: "Purple", tagline: "Uma experiência de memória púrpura",
@@ -225,7 +225,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "Suas cápsulas", historySub: "As últimas 5 cápsulas que você selou — só neste dispositivo.",
     historyEmpty: "Ainda não há cápsulas. Sele a sua primeira 💜", historyClear: "Limpar histórico",
     scanQR: "Escaneie para criar a sua",
-    moods: baseMoods("Feliz","Triste","Esperançosa","Nostálgica","Perdida","Motivada"),
+    moods: baseMoods("Feliz","Triste","Esperançosa","Nostálgica","Perdida","Motivada","Grata","Amada","Ansiosa","Em paz"),
   },
   ko: {
     brand: "퍼플", tagline: "보라빛 기억의 경험",
@@ -262,7 +262,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "당신의 캡슐", historySub: "최근 봉인한 5개의 캡슐 — 이 기기에만 저장돼요.",
     historyEmpty: "아직 캡슐이 없어요. 첫 캡슐을 봉인해보세요 💜", historyClear: "기록 지우기",
     scanQR: "스캔해서 만들어보세요",
-    moods: baseMoods("행복","슬픔","희망","그리움","길잃음","열정"),
+    moods: baseMoods("행복","슬픔","희망","그리움","길잃음","열정","감사","사랑","불안","평온"),
   },
   ja: {
     brand: "パープル", tagline: "紫色の記憶体験",
@@ -299,7 +299,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "あなたのカプセル", historySub: "最近封印した5つのカプセル — この端末にのみ保存。",
     historyEmpty: "まだカプセルがありません。最初の一つを封印しましょう 💜", historyClear: "履歴を消去",
     scanQR: "スキャンして作る",
-    moods: baseMoods("幸せ","悲しい","希望","懐かしい","迷い","情熱"),
+    moods: baseMoods("幸せ","悲しい","希望","懐かしい","迷い","情熱","感謝","愛されてる","不安","穏やか"),
   },
   zh: {
     brand: "紫色", tagline: "紫色记忆体验",
@@ -336,7 +336,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "你的胶囊", historySub: "你封存的最近 5 个胶囊 —— 仅保存在此设备。",
     historyEmpty: "还没有胶囊。封存你的第一个吧 💜", historyClear: "清除历史",
     scanQR: "扫码创建你的",
-    moods: baseMoods("快乐","悲伤","希望","怀念","迷茫","热血"),
+    moods: baseMoods("快乐","悲伤","希望","怀念","迷茫","热血","感恩","被爱","焦虑","平静"),
   },
   fr: {
     brand: "Purple", tagline: "Une expérience de mémoire violette",
@@ -373,7 +373,7 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "Tes capsules", historySub: "Les 5 dernières capsules scellées — uniquement sur cet appareil.",
     historyEmpty: "Aucune capsule encore. Scelle la première 💜", historyClear: "Effacer l'historique",
     scanQR: "Scanne pour créer la tienne",
-    moods: baseMoods("Heureuse","Triste","Pleine d'espoir","Nostalgique","Perdue","Motivée"),
+    moods: baseMoods("Heureuse","Triste","Pleine d'espoir","Nostalgique","Perdue","Motivée","Reconnaissante","Aimée","Anxieuse","Paisible"),
   },
   de: {
     brand: "Purple", tagline: "Ein violettes Erinnerungserlebnis",
@@ -410,6 +410,6 @@ export const DICT: Record<Lang, Dict> = {
     historyTitle: "Deine Kapseln", historySub: "Die letzten 5 versiegelten Kapseln — nur auf diesem Gerät.",
     historyEmpty: "Noch keine Kapseln. Versiegle deine erste 💜", historyClear: "Verlauf löschen",
     scanQR: "Scannen, um deine zu erstellen",
-    moods: baseMoods("Glücklich","Traurig","Hoffnungsvoll","Nostalgisch","Verloren","Motiviert"),
+    moods: baseMoods("Glücklich","Traurig","Hoffnungsvoll","Nostalgisch","Verloren","Motiviert","Dankbar","Geliebt","Ängstlich","Friedlich"),
   },
 };
