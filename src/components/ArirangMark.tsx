@@ -6,8 +6,8 @@
 const ArirangMark = ({ className = "", size = "md" }: { className?: string; size?: "md" | "lg" }) => {
   const isLg = size === "lg";
   return (
-  <div className={`inline-flex items-center gap-3 ${className}`}>
-    <svg viewBox="0 0 56 56" className={isLg ? "h-14 w-14" : "h-9 w-9"} aria-hidden="true">
+  <div className={`inline-flex min-w-0 items-center gap-2 sm:gap-3 ${className}`}>
+    <svg viewBox="0 0 56 56" className={isLg ? "h-10 w-10 shrink-0 sm:h-14 sm:w-14" : "h-9 w-9 shrink-0"} aria-hidden="true">
       <defs>
         <linearGradient id="amg" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0%" stopColor="hsl(var(--lavender))" />
@@ -47,12 +47,12 @@ const ArirangMark = ({ className = "", size = "md" }: { className?: string; size
         fill="none"
       />
     </svg>
-    <div className="leading-tight">
-      <div className={`font-serif tracking-[0.4em] text-foreground/95 ${isLg ? "text-[22px]" : "text-[14px]"}`}>
+    <div className="min-w-0 leading-tight">
+      <div className={`font-serif text-foreground/95 ${isLg ? "text-[17px] tracking-[0.32em] sm:text-[22px] sm:tracking-[0.4em]" : "text-[14px] tracking-[0.4em]"}`}>
         ARMY <span className="text-gradient">CAPSULE</span>
       </div>
       <div
-        className={`tracking-[0.4em] text-gold-soft/80 hangul-stroke ${isLg ? "text-[13px]" : "text-[10px]"}`}
+        className={`text-gold-soft/80 hangul-stroke ${isLg ? "text-[11px] tracking-[0.32em] sm:text-[13px] sm:tracking-[0.4em]" : "text-[10px] tracking-[0.4em]"}`}
         style={{ fontFamily: "'Noto Serif KR', serif" }}
       >
         보 라 해
