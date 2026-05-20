@@ -181,7 +181,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
   }, []);
   return (
     <div className="mx-auto grid max-w-7xl gap-10 pt-6 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10">
-      <div className="flex flex-col justify-center animate-fade-up">
+      <div className="flex flex-col justify-center animate-fade-up order-2 md:order-1">
         <p className="mb-5 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.heroEyebrow}</p>
         <h1 className="font-serif text-5xl leading-[1.05] md:text-7xl">
           {t.heroTitle1} <span className="text-gradient">{t.heroTitle2}</span> 💜
@@ -204,7 +204,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
         </div>
       </div>
 
-      <div className="relative animate-scale-in">
+      <div className="relative animate-scale-in order-1 md:order-2">
         <div className="relative overflow-hidden rounded-[2rem] shadow-soft bg-[hsl(265_55%_8%)]">
           <img
             src={hero} alt="7 BTS-inspired silhouettes on a purple moonlit Korean mountain ridge"
