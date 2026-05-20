@@ -115,7 +115,7 @@ const Index = () => {
   const calmMotifs = step === "compose";
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative min-h-screen overflow-x-hidden">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-aurora" />
@@ -144,7 +144,7 @@ const Index = () => {
         </div>
       </header>
 
-      <section className="relative z-10 px-6 pb-20 md:px-10">
+      <section className="relative z-10 px-4 pb-16 sm:px-6 md:px-10 md:pb-20">
         {step === "intro" && <Intro onStart={startCompose} />}
         {step === "compose" && (
           <Compose
@@ -180,19 +180,19 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <div className="mx-auto grid max-w-7xl gap-10 pt-6 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10">
-      <div className="flex flex-col justify-center animate-fade-up order-2 md:order-1">
+    <div className="mx-auto grid max-w-7xl gap-7 pt-2 sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10">
+      <div className="relative z-20 flex flex-col justify-center animate-fade-up order-2 md:order-1 md:justify-start lg:justify-center">
         <p className="mb-5 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.heroEyebrow}</p>
-        <h1 className="font-serif text-5xl leading-[1.05] md:text-7xl">
+        <h1 className="font-serif text-4xl leading-[1.05] sm:text-5xl md:text-7xl">
           {t.heroTitle1} <span className="text-gradient">{t.heroTitle2}</span> 💜
         </h1>
-        <p className="mt-6 max-w-xl text-base leading-relaxed text-foreground/75 md:text-lg">
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base md:mt-6 md:text-lg">
           {t.heroSub}
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-4">
+        <div className="relative z-30 mt-7 flex flex-wrap items-center gap-3 md:mt-10 md:gap-4">
           <Button
-            size="lg" onClick={onStart}
-            className="group h-14 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground shadow-glow hover:bg-primary/90 animate-pulse-glow"
+            type="button" size="lg" onClick={onStart}
+            className="group h-12 rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90 animate-pulse-glow md:h-14 md:px-8 md:text-base"
           >
             {t.start} <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
           </Button>
