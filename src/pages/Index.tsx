@@ -180,23 +180,23 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <div className="mx-auto grid max-w-7xl gap-7 pt-2 sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10">
+    <div className="mx-auto grid max-w-7xl gap-7 pt-2 text-center sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10 md:text-left">
       <div className="relative z-20 flex flex-col justify-center animate-fade-up order-2 md:order-1 md:justify-start lg:justify-center">
-        <p className="mb-5 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.heroEyebrow}</p>
+        <p className="mb-4 text-[10px] uppercase tracking-[0.28em] text-gold-soft/80 sm:text-xs sm:tracking-[0.4em] md:mb-5">{t.heroEyebrow}</p>
         <h1 className="font-serif text-4xl leading-[1.05] sm:text-5xl md:text-7xl">
           {t.heroTitle1} <span className="text-gradient">{t.heroTitle2}</span> 💜
         </h1>
-        <p className="mt-4 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base md:mt-6 md:text-lg">
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base md:mx-0 md:mt-6 md:text-lg">
           {t.heroSub}
         </p>
-        <div className="relative z-30 mt-7 flex flex-wrap items-center gap-3 md:mt-10 md:gap-4">
+        <div className="relative z-30 mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-10 md:justify-start md:gap-4">
           <Button
             type="button" size="lg" onClick={onStart}
             className="group h-12 rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90 animate-pulse-glow md:h-14 md:px-8 md:text-base"
           >
             {t.start} <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
           </Button>
-          <span className="text-xs uppercase tracking-[0.25em] text-foreground/50">{t.underBtn}</span>
+          <span className="max-w-[12rem] text-[10px] uppercase leading-relaxed tracking-[0.18em] text-foreground/50 sm:max-w-none sm:text-xs sm:tracking-[0.25em]">{t.underBtn}</span>
         </div>
 
         <div className="mt-8 flex justify-center md:mt-12 md:justify-start">
