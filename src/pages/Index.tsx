@@ -231,8 +231,8 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             <StarField count={30} />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/5 to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6">
-            <p className="font-serif text-lg leading-tight text-foreground/95 md:text-2xl">
+          <div className="absolute bottom-4 left-4 right-4 text-left md:bottom-6 md:left-6 md:right-6">
+            <p className="font-serif text-base leading-tight text-foreground/95 sm:text-lg md:text-2xl">
               “{t.heroQuote1}<br/>
               <span className="text-gold-soft/90">{t.heroQuote2}</span>”
             </p>
