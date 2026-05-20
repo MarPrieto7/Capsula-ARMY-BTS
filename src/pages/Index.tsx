@@ -207,10 +207,14 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
       <div className="relative animate-scale-in">
         <div className="relative overflow-hidden rounded-[2rem] shadow-soft bg-[hsl(265_55%_8%)]">
           <img
-            src={hero} alt="Purple moonlit Korean mountains — Arirang inspired"
+            src={hero} alt="7 BTS-inspired silhouettes on a purple moonlit Korean mountain ridge"
             width={1920} height={1280}
-            className="aspect-[3/2] w-full object-contain object-center"
-            style={{ transform: `translateY(${scrollY * 0.08}px)` }}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="aspect-[3/2] w-full max-h-[78vh] object-contain object-center"
+            style={{ transform: `translateY(${scrollY * 0.06}px)` }}
           />
           {/* Parallax moon */}
           <div
