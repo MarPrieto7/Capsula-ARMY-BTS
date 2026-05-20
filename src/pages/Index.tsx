@@ -115,7 +115,7 @@ const Index = () => {
   const calmMotifs = step === "compose";
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative min-h-screen overflow-x-hidden">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-aurora" />
@@ -133,18 +133,18 @@ const Index = () => {
         <div className="absolute inset-0 bg-glow" />
       </div>
 
-      <header className="relative z-10 flex items-center justify-between px-6 py-5 md:px-10">
-        <button onClick={reset} className="hover:opacity-90 transition" aria-label="Home">
+      <header className="relative z-30 flex min-w-0 items-center justify-between gap-2 px-4 py-4 sm:px-6 md:px-10 md:py-5">
+        <button onClick={reset} className="min-w-0 shrink hover:opacity-90 transition" aria-label="Home">
           <ArirangMark size="lg" />
         </button>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <AmbientAudio />
           <CapsuleHistory history={history} onOpen={openFromHistory} onClear={clearHistory} />
           <LangSwitcher />
         </div>
       </header>
 
-      <section className="relative z-10 px-6 pb-20 md:px-10">
+      <section className="relative z-10 px-4 pb-16 sm:px-6 md:px-10 md:pb-20">
         {step === "intro" && <Intro onStart={startCompose} />}
         {step === "compose" && (
           <Compose
@@ -163,7 +163,7 @@ const Index = () => {
         )}
       </section>
 
-      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-6 py-6 text-center text-xs text-foreground/50 md:px-10">
+      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 text-center text-xs text-foreground/50 sm:px-6 md:px-10">
         {t.footer}
       </footer>
     </main>
@@ -180,32 +180,32 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <div className="mx-auto grid max-w-7xl gap-10 pt-6 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10">
-      <div className="flex flex-col justify-center animate-fade-up order-2 md:order-1">
-        <p className="mb-5 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.heroEyebrow}</p>
-        <h1 className="font-serif text-5xl leading-[1.05] md:text-7xl">
+    <div className="mx-auto grid max-w-7xl gap-7 pt-2 text-center sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10 md:text-left">
+      <div className="relative z-20 flex flex-col justify-center animate-fade-up order-2 md:order-1 md:justify-start lg:justify-center">
+        <p className="mb-4 text-[10px] uppercase tracking-[0.28em] text-gold-soft/80 sm:text-xs sm:tracking-[0.4em] md:mb-5">{t.heroEyebrow}</p>
+        <h1 className="font-serif text-4xl leading-[1.05] sm:text-5xl md:text-7xl">
           {t.heroTitle1} <span className="text-gradient">{t.heroTitle2}</span> 💜
         </h1>
-        <p className="mt-6 max-w-xl text-base leading-relaxed text-foreground/75 md:text-lg">
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base md:mx-0 md:mt-6 md:text-lg">
           {t.heroSub}
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-4">
+        <div className="relative z-30 mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-10 md:justify-start md:gap-4">
           <Button
-            size="lg" onClick={onStart}
-            className="group h-14 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground shadow-glow hover:bg-primary/90 animate-pulse-glow"
+            type="button" size="lg" onClick={onStart}
+            className="group h-12 rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90 animate-pulse-glow md:h-14 md:px-8 md:text-base"
           >
             {t.start} <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
           </Button>
-          <span className="text-xs uppercase tracking-[0.25em] text-foreground/50">{t.underBtn}</span>
+          <span className="max-w-[12rem] text-[10px] uppercase leading-relaxed tracking-[0.18em] text-foreground/50 sm:max-w-none sm:text-xs sm:tracking-[0.25em]">{t.underBtn}</span>
         </div>
 
-        <div className="mt-12 flex justify-center md:justify-start">
+        <div className="mt-8 flex justify-center md:mt-12 md:justify-start">
           <Constellation size={520} showLabel className="w-full max-w-xl" />
         </div>
       </div>
 
-      <div className="relative animate-scale-in order-1 md:order-2">
-        <div className="relative overflow-hidden rounded-[2rem] shadow-soft bg-[hsl(265_55%_8%)]">
+      <div className="relative z-10 animate-scale-in order-1 md:order-2">
+        <div className="relative overflow-hidden rounded-3xl shadow-soft bg-background md:rounded-[2rem]">
           <img
             src={hero} alt="7 BTS-inspired silhouettes on a purple moonlit Korean mountain ridge"
             width={1920} height={1280}
@@ -213,12 +213,12 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             decoding="async"
             fetchPriority="high"
             sizes="(min-width: 768px) 50vw, 100vw"
-            className="aspect-[3/2] w-full max-h-[78vh] object-contain object-center"
-            style={{ transform: `translateY(${scrollY * 0.06}px)` }}
+            className="block aspect-[3/2] w-full max-h-[42vh] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
+            style={{ transform: `translateY(${scrollY * 0.025}px)` }}
           />
           {/* Parallax moon */}
           <div
-            className="absolute right-10 top-10 h-24 w-24 rounded-full bg-gradient-to-br from-[hsl(var(--lavender))] to-[hsl(var(--gold-soft))] opacity-80 blur-[2px] shadow-glow"
+            className="absolute right-5 top-5 h-14 w-14 rounded-full bg-gradient-to-br from-[hsl(var(--lavender))] to-[hsl(var(--gold-soft))] opacity-80 blur-[2px] shadow-glow md:right-10 md:top-10 md:h-24 md:w-24"
             style={{ transform: `translateY(${scrollY * -0.25}px)` }}
             aria-hidden="true"
           />
@@ -230,9 +230,9 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           >
             <StarField count={30} />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6">
-            <p className="font-serif text-xl text-foreground/95 md:text-2xl">
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/5 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 text-left md:bottom-6 md:left-6 md:right-6">
+            <p className="font-serif text-base leading-tight text-foreground/95 sm:text-lg md:text-2xl">
               “{t.heroQuote1}<br/>
               <span className="text-gold-soft/90">{t.heroQuote2}</span>”
             </p>
