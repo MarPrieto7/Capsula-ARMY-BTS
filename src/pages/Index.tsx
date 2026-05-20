@@ -133,11 +133,11 @@ const Index = () => {
         <div className="absolute inset-0 bg-glow" />
       </div>
 
-      <header className="relative z-10 flex items-center justify-between px-6 py-5 md:px-10">
-        <button onClick={reset} className="hover:opacity-90 transition" aria-label="Home">
+      <header className="relative z-30 flex min-w-0 items-center justify-between gap-2 px-4 py-4 sm:px-6 md:px-10 md:py-5">
+        <button onClick={reset} className="min-w-0 shrink hover:opacity-90 transition" aria-label="Home">
           <ArirangMark size="lg" />
         </button>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <AmbientAudio />
           <CapsuleHistory history={history} onOpen={openFromHistory} onClear={clearHistory} />
           <LangSwitcher />
@@ -163,7 +163,7 @@ const Index = () => {
         )}
       </section>
 
-      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-6 py-6 text-center text-xs text-foreground/50 md:px-10">
+      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 text-center text-xs text-foreground/50 sm:px-6 md:px-10">
         {t.footer}
       </footer>
     </main>
