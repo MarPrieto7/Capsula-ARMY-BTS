@@ -180,7 +180,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <div className="mx-auto grid max-w-6xl gap-10 pt-6 md:grid-cols-[1.1fr_0.9fr] md:gap-16 md:pt-10">
+    <div className="mx-auto grid max-w-7xl gap-10 pt-6 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10">
       <div className="flex flex-col justify-center animate-fade-up">
         <p className="mb-5 text-xs uppercase tracking-[0.4em] text-gold-soft/80">{t.heroEyebrow}</p>
         <h1 className="font-serif text-5xl leading-[1.05] md:text-7xl">
@@ -207,10 +207,14 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
       <div className="relative animate-scale-in">
         <div className="relative overflow-hidden rounded-[2rem] shadow-soft bg-[hsl(265_55%_8%)]">
           <img
-            src={hero} alt="Purple moonlit Korean mountains — Arirang inspired"
+            src={hero} alt="7 BTS-inspired silhouettes on a purple moonlit Korean mountain ridge"
             width={1920} height={1280}
-            className="aspect-[3/2] w-full object-contain object-center"
-            style={{ transform: `translateY(${scrollY * 0.08}px)` }}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="aspect-[3/2] w-full max-h-[78vh] object-contain object-center"
+            style={{ transform: `translateY(${scrollY * 0.06}px)` }}
           />
           {/* Parallax moon */}
           <div
