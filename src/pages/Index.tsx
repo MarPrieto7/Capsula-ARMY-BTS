@@ -205,12 +205,12 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
       </div>
 
       <div className="relative animate-scale-in">
-        <div className="relative overflow-hidden rounded-[2rem] shadow-soft">
+        <div className="relative overflow-hidden rounded-[2rem] shadow-soft bg-[hsl(265_55%_8%)]">
           <img
             src={hero} alt="Purple moonlit Korean mountains — Arirang inspired"
             width={1920} height={1280}
-            className="h-[420px] w-full object-cover md:h-[560px]"
-            style={{ transform: `translateY(${scrollY * 0.15}px) scale(1.05)` }}
+            className="aspect-[3/2] w-full object-contain object-center"
+            style={{ transform: `translateY(${scrollY * 0.08}px)` }}
           />
           {/* Parallax moon */}
           <div
