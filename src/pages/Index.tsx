@@ -199,13 +199,13 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           <span className="text-xs uppercase tracking-[0.25em] text-foreground/50">{t.underBtn}</span>
         </div>
 
-        <div className="mt-12 flex justify-center md:justify-start">
+        <div className="mt-8 flex justify-center md:mt-12 md:justify-start">
           <Constellation size={520} showLabel className="w-full max-w-xl" />
         </div>
       </div>
 
-      <div className="relative animate-scale-in order-1 md:order-2">
-        <div className="relative overflow-hidden rounded-[2rem] shadow-soft bg-[hsl(265_55%_8%)]">
+      <div className="relative z-10 animate-scale-in order-1 md:order-2">
+        <div className="relative overflow-hidden rounded-3xl shadow-soft bg-background md:rounded-[2rem]">
           <img
             src={hero} alt="7 BTS-inspired silhouettes on a purple moonlit Korean mountain ridge"
             width={1920} height={1280}
@@ -213,12 +213,12 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             decoding="async"
             fetchPriority="high"
             sizes="(min-width: 768px) 50vw, 100vw"
-            className="aspect-[3/2] w-full max-h-[78vh] object-contain object-center"
-            style={{ transform: `translateY(${scrollY * 0.06}px)` }}
+            className="block aspect-[3/2] w-full max-h-[42vh] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
+            style={{ transform: `translateY(${scrollY * 0.025}px)` }}
           />
           {/* Parallax moon */}
           <div
-            className="absolute right-10 top-10 h-24 w-24 rounded-full bg-gradient-to-br from-[hsl(var(--lavender))] to-[hsl(var(--gold-soft))] opacity-80 blur-[2px] shadow-glow"
+            className="absolute right-5 top-5 h-14 w-14 rounded-full bg-gradient-to-br from-[hsl(var(--lavender))] to-[hsl(var(--gold-soft))] opacity-80 blur-[2px] shadow-glow md:right-10 md:top-10 md:h-24 md:w-24"
             style={{ transform: `translateY(${scrollY * -0.25}px)` }}
             aria-hidden="true"
           />
@@ -230,9 +230,9 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           >
             <StarField count={30} />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6">
-            <p className="font-serif text-xl text-foreground/95 md:text-2xl">
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/5 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6">
+            <p className="font-serif text-lg leading-tight text-foreground/95 md:text-2xl">
               “{t.heroQuote1}<br/>
               <span className="text-gold-soft/90">{t.heroQuote2}</span>”
             </p>
