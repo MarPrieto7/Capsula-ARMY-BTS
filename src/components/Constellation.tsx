@@ -24,7 +24,7 @@ const STARS: [number, number, number][] = [
 const Constellation = ({ className = "", size = 540, showLabel = false, label = "보 라 해" }: Props) => {
   const path = STARS.map((s, i) => `${i === 0 ? "M" : "L"}${s[0]} ${s[1]}`).join(" ");
   return (
-    <div className={`relative inline-block ${className}`} style={{ width: size }}>
+    <div className={`relative inline-block max-w-full ${className}`} style={{ width: `min(${size}px, 100%)` }}>
       <svg viewBox="0 0 560 200" className="w-full h-auto" aria-hidden="true">
         <defs>
           <linearGradient id="constLine" x1="0" x2="1" y1="0" y2="0">
