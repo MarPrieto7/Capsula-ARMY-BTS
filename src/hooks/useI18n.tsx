@@ -11,6 +11,11 @@ function detect(): Lang {
   const saved = localStorage.getItem(STORAGE_KEY) as Lang | null;
   if (saved && DICT[saved]) return saved;
   const nav = navigator.language.toLowerCase();
+  if (nav.startsWith("th")) return "th";
+  if (nav.startsWith("ms")) return "ms";
+  if (nav.startsWith("ta")) return "ta";
+  if (nav.startsWith("id")) return "id";
+  if (nav.startsWith("fil") || nav.startsWith("tl")) return "fil";
   if (nav.startsWith("ko")) return "ko";
   if (nav.startsWith("fr")) return "fr";
   if (nav.startsWith("de")) return "de";
