@@ -54,7 +54,10 @@ const Index = () => {
     canon.href = window.location.origin + "/";
   }, [t, lang]);
 
-  const startCompose = () => setStep("compose");
+  const startCompose = () => {
+    setStep("compose");
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+  };
   const generate = () => {
     if (!mood) return;
     const c = generateCapsule(mood, sanitize(message));
@@ -144,7 +147,7 @@ const Index = () => {
         </div>
       </header>
 
-      <section className="relative z-10 px-4 pb-16 sm:px-6 md:px-10 md:pb-20">
+      <section className="relative z-10 px-4 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:px-6 md:px-10 md:pb-20">
         {step === "intro" && <Intro onStart={startCompose} />}
         {step === "compose" && (
           <Compose
@@ -163,6 +166,8 @@ const Index = () => {
         )}
       </section>
 
+      {step === "intro" && <MobileStartButton onStart={startCompose} label={t.start} />}
+
       <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 text-center text-xs text-foreground/50 sm:px-6 md:px-10">
         {t.footer}
       </footer>
@@ -180,7 +185,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <div className="mx-auto grid max-w-7xl gap-7 pt-2 text-center sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10 md:text-left">
+    <div className="mx-auto grid max-w-7xl gap-5 pt-1 text-center sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10 md:text-left">
       <div className="relative z-20 flex flex-col justify-center animate-fade-up order-2 md:order-1 md:justify-start lg:justify-center">
         <p className="mb-4 text-[10px] uppercase tracking-[0.28em] text-gold-soft/80 sm:text-xs sm:tracking-[0.4em] md:mb-5">{t.heroEyebrow}</p>
         <h1 className="font-serif text-4xl leading-[1.05] sm:text-5xl md:text-7xl">
@@ -189,7 +194,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
         <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base md:mx-0 md:mt-6 md:text-lg">
           {t.heroSub}
         </p>
-        <div className="relative z-30 mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-10 md:justify-start md:gap-4">
+        <div className="relative z-30 mt-7 hidden flex-wrap items-center justify-center gap-3 md:mt-10 md:flex md:justify-start md:gap-4">
           <Button
             type="button" size="lg" onClick={onStart}
             className="group h-12 rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground shadow-glow hover:bg-primary/90 animate-pulse-glow md:h-14 md:px-8 md:text-base"
@@ -213,7 +218,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             decoding="async"
             fetchPriority="high"
             sizes="(min-width: 768px) 50vw, 100vw"
-            className="block aspect-[3/2] w-full max-h-[42vh] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
+            className="block aspect-[3/2] w-full max-h-[min(38svh,22rem)] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
             style={{ transform: `translateY(${scrollY * 0.025}px)` }}
           />
           {/* Parallax moon */}
