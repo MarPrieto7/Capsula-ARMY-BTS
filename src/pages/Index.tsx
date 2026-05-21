@@ -199,13 +199,13 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <div className="mx-auto grid max-w-7xl gap-5 pt-1 text-center sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10 md:text-left">
+    <div className="mx-auto grid max-w-7xl gap-4 pt-0 text-center sm:gap-10 md:grid-cols-[1fr_1.1fr] md:gap-12 md:pt-10 md:text-left">
       <div className="relative z-20 flex flex-col justify-center animate-fade-up order-2 md:order-1 md:justify-start lg:justify-center">
-        <p className="mb-4 text-[10px] uppercase tracking-[0.28em] text-gold-soft/80 sm:text-xs sm:tracking-[0.4em] md:mb-5">{t.heroEyebrow}</p>
-        <h1 className="font-serif text-4xl leading-[1.05] sm:text-5xl md:text-7xl">
+        <p className="mb-3 text-[10px] uppercase tracking-[0.22em] text-gold-soft/80 sm:text-xs sm:tracking-[0.4em] md:mb-5">{t.heroEyebrow}</p>
+        <h1 className="font-serif text-[2.2rem] leading-[1.02] sm:text-5xl md:text-7xl">
           {t.heroTitle1} <span className="text-gradient">{t.heroTitle2}</span> 💜
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base md:mx-0 md:mt-6 md:text-lg">
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base md:mx-0 md:mt-6 md:text-lg">
           {t.heroSub}
         </p>
         <div className="relative z-30 mt-7 hidden flex-wrap items-center justify-center gap-3 md:mt-10 md:flex md:justify-start md:gap-4">
@@ -218,7 +218,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           <span className="max-w-[12rem] text-[10px] uppercase leading-relaxed tracking-[0.18em] text-foreground/50 sm:max-w-none sm:text-xs sm:tracking-[0.25em]">{t.underBtn}</span>
         </div>
 
-        <div className="mt-8 flex justify-center md:mt-12 md:justify-start">
+        <div className="mt-6 flex justify-center md:mt-12 md:justify-start">
           <Constellation size={520} showLabel className="w-full max-w-xl" />
         </div>
       </div>
@@ -232,7 +232,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             decoding="async"
             fetchPriority="high"
             sizes="(min-width: 768px) 50vw, 100vw"
-            className="block aspect-[3/2] w-full max-h-[min(38svh,22rem)] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
+            className="block aspect-[3/2] w-full max-h-[min(34svh,20rem)] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
             style={{ transform: `translateY(${scrollY * 0.025}px)` }}
           />
           {/* Parallax moon */}
