@@ -1,4 +1,4 @@
-export type Lang = "en" | "es" | "es-419" | "ko" | "fr" | "de" | "pt" | "ja" | "zh";
+export type Lang = "en" | "es" | "es-419" | "ko" | "fr" | "de" | "pt" | "ja" | "zh" | "th" | "ms" | "ta" | "id" | "fil";
 
 export const LANGS: { code: Lang; label: string; flag: string }[] = [
   { code: "en",     label: "English",         flag: "🇬🇧" },
@@ -10,6 +10,11 @@ export const LANGS: { code: Lang; label: string; flag: string }[] = [
   { code: "ko",     label: "한국어",            flag: "🇰🇷" },
   { code: "ja",     label: "日本語",            flag: "🇯🇵" },
   { code: "zh",     label: "中文",              flag: "🇨🇳" },
+  { code: "th",     label: "ไทย",              flag: "🇹🇭" },
+  { code: "ms",     label: "Bahasa Melayu",    flag: "🇲🇾" },
+  { code: "ta",     label: "தமிழ்",            flag: "🇮🇳" },
+  { code: "id",     label: "Bahasa Indonesia", flag: "🇮🇩" },
+  { code: "fil",    label: "Filipino",         flag: "🇵🇭" },
 ];
 
 export type Dict = {
