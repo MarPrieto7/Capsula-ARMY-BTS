@@ -175,6 +175,20 @@ const Index = () => {
   );
 };
 
+const MobileStartButton = ({ onStart, label }: { onStart: () => void; label: string }) => (
+  <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3 md:hidden">
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/90 to-transparent" />
+    <Button
+      type="button"
+      size="lg"
+      onClick={onStart}
+      className="relative h-14 w-full rounded-full bg-primary text-base font-medium text-primary-foreground shadow-glow hover:bg-primary/90 animate-pulse-glow"
+    >
+      {label} <ArrowRight className="ml-2 h-4 w-4" />
+    </Button>
+  </div>
+);
+
 /* ---------- Intro ---------- */
 const Intro = ({ onStart }: { onStart: () => void }) => {
   const { t } = useI18n();
