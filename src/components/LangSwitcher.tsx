@@ -22,7 +22,7 @@ const LangSwitcher = () => {
           <span className="sm:hidden">{current.flag}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="glass-strong border-foreground/10 min-w-[180px]">
+      <DropdownMenuContent align="end" className="glass-strong max-h-[70svh] min-w-[180px] overflow-y-auto border-foreground/10">
         {LANGS.map(l => (
           <DropdownMenuItem
             key={l.code}
