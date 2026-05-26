@@ -79,6 +79,31 @@ export const PHRASES: Record<string, string[]> = {
     "The moon doesn't rush, and neither must you.",
     "Tonight, let your bones rest. The stars are keeping watch.",
   ],
+  dreamy: [
+    "Tonight your thoughts wear silk and walk barefoot through the stars.",
+    "Some dreams are letters from the future — read them gently.",
+    "The moon left a little of its light inside you. Keep it.",
+  ],
+  brave: [
+    "Even your trembling hands are doing something holy.",
+    "Brave is just fear that decided to keep walking.",
+    "You crossed your own ocean today — and you're still standing.",
+  ],
+  excited: [
+    "Your heart is dancing, and the whole sky noticed.",
+    "Something good is on the way — you can feel the violet humming.",
+    "Today feels like a song you've never heard but already love.",
+  ],
+  melancholic: [
+    "Some sadness is just love remembering itself out loud.",
+    "The grey hours have their own quiet beauty — let them speak.",
+    "You are not broken; you are tender, and that is a kind of strength.",
+  ],
+  inspired: [
+    "There's a small spark in you that the world has been waiting for.",
+    "Your ideas are stars learning how to shine in your colour.",
+    "Create softly, create bravely — the universe is listening.",
+  ],
 };
 
 // Song-inspired lines — ORIGINAL writing evoking the spirit of real BTS songs.
