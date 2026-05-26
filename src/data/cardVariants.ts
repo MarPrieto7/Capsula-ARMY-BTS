@@ -64,6 +64,17 @@ export const CARD_VARIANTS: CardVariant[] = [
     dancheongRotate: -20,
     dancheongOpacity: [0.20, 0.14],
   },
+  {
+    id: "silhouettes-7",
+    surfaceClass: "bg-[hsl(260_55%_12%)]",
+    glowClass: "bg-gradient-to-b from-[hsl(var(--gold-soft)/0.15)] to-transparent",
+    ridgeFill1: "hsl(var(--gold-soft))",
+    ridgeFill2: "hsl(var(--violet-deep))",
+    dancheongRotate: 8,
+    dancheongOpacity: [0.10, 0.08],
+    bgImage: "/src/assets/card-silhouettes-7.jpg",
+    bgOverlayClass: "bg-gradient-to-b from-[hsl(260_60%_10%/0.55)] via-[hsl(260_60%_10%/0.75)] to-[hsl(260_60%_8%/0.92)]",
+  },
 ];
 
 export function pickVariant(seed?: string): CardVariant {
