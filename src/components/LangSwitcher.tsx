@@ -15,23 +15,29 @@ const LangSwitcher = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="h-9 gap-2 rounded-full border border-foreground/15 bg-foreground/5 px-3 text-xs uppercase tracking-[0.2em] text-foreground/80 hover:bg-foreground/10 hover:text-foreground"
+          aria-label={`Language: ${current.label}`}
+          className="h-9 gap-1.5 rounded-full border border-foreground/15 bg-foreground/5 px-2.5 text-xs uppercase tracking-[0.2em] text-foreground/80 hover:bg-foreground/10 hover:text-foreground sm:gap-2 sm:px-3"
         >
           <Globe className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">{current.flag} {current.label}</span>
-          <span className="sm:hidden">{current.flag}</span>
+          <span className="hidden md:inline">{current.flag} {current.code.toUpperCase()}</span>
+          <span className="md:hidden text-base leading-none">{current.flag}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="glass-strong max-h-[70svh] min-w-[180px] overflow-y-auto border-foreground/10">
+      <DropdownMenuContent
+        align="end"
+        sideOffset={6}
+        collisionPadding={8}
+        className="glass-strong max-h-[min(70svh,28rem)] w-[min(90vw,18rem)] overflow-y-auto border-foreground/10"
+      >
         {LANGS.map(l => (
           <DropdownMenuItem
             key={l.code}
             onClick={() => setLang(l.code)}
-            className="cursor-pointer gap-2 text-sm focus:bg-foreground/10"
+            className="cursor-pointer gap-2 py-2.5 text-sm focus:bg-foreground/10"
           >
             <span className="text-base">{l.flag}</span>
-            <span className="flex-1">{l.label}</span>
-            {l.code === lang && <Check className="h-3.5 w-3.5 text-gold-soft" />}
+            <span className="flex-1 truncate">{l.label}</span>
+            {l.code === lang && <Check className="h-3.5 w-3.5 shrink-0 text-gold-soft" />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
