@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { toPng } from "html-to-image";
-import { Download, RefreshCw, ArrowRight, Sparkles } from "lucide-react";
+import { Download, RefreshCw, ArrowRight, Sparkles, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import StarField from "@/components/StarField";
