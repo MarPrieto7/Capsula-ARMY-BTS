@@ -49,7 +49,7 @@ const ArirangMark = ({ className = "", size = "md" }: { className?: string; size
     </svg>
     <div className="min-w-0 leading-tight">
       <div className={`font-serif text-foreground/95 ${isLg ? "text-[17px] tracking-[0.32em] sm:text-[22px] sm:tracking-[0.4em]" : "text-[14px] tracking-[0.4em]"}`}>
-        ARMY <span className="text-gradient">CAPSULE</span>
+        ARMY <span className="text-gradient">CAPSULE</span><sup className="ml-0.5 text-[0.55em] tracking-normal text-gold-soft/80">®</sup>
       </div>
       <div
         className={`text-gold-soft/80 hangul-stroke ${isLg ? "text-[11px] tracking-[0.32em] sm:text-[13px] sm:tracking-[0.4em]" : "text-[10px] tracking-[0.4em]"}`}
