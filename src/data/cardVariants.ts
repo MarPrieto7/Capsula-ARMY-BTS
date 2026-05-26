@@ -74,7 +74,7 @@ export const CARD_VARIANTS: CardVariant[] = [
     ridgeFill2: "hsl(var(--violet-deep))",
     dancheongRotate: 8,
     dancheongOpacity: [0.10, 0.08],
-    bgImage: "/src/assets/card-silhouettes-7.jpg",
+    bgImage: silhouettes7,
     bgOverlayClass: "bg-gradient-to-b from-[hsl(260_60%_10%/0.55)] via-[hsl(260_60%_10%/0.75)] to-[hsl(260_60%_8%/0.92)]",
   },
 ];
