@@ -73,14 +73,18 @@ export type Dict = {
   historyClear: string;
   scanQR: string;
   moods: Record<string, string>;
+  footerBy: string;
+  footerTrademark: string;
 };
 
 const baseMoods = (
   h: string, s: string, ho: string, n: string, l: string, m: string,
   g: string, lv: string, a: string, p: string,
+  dreamy: string, brave: string, excited: string, melancholic: string, inspired: string,
 ) => ({
   happy: h, sad: s, hopeful: ho, nostalgic: n, lost: l, motivated: m,
   grateful: g, loved: lv, anxious: a, peaceful: p,
+  dreamy, brave, excited, melancholic, inspired,
 });
 
 export const DICT: Record<Lang, Dict> = {
