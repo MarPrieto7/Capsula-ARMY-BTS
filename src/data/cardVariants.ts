@@ -1,7 +1,7 @@
 // 3 visual variants for the capsule card. Selected randomly per generation.
 // Pure data — colors are HSL semantic tokens (no raw colors in components).
 export type CardVariant = {
-  id: "moonlit" | "sunset" | "hanji" | "hanbok-silk" | "hanbok-norigae";
+  id: "moonlit" | "sunset" | "hanji" | "hanbok-silk" | "hanbok-norigae" | "silhouettes-7";
   // tailwind classes for the surface gradient
   surfaceClass: string;
   // glow tint over the top
@@ -12,7 +12,11 @@ export type CardVariant = {
   // dancheong rotation (deg)
   dancheongRotate: number;
   dancheongOpacity: [number, number]; // [top-right, bottom-left]
+  // optional background image (rendered behind content with overlay)
+  bgImage?: string;
+  bgOverlayClass?: string;
 };
+
 
 export const CARD_VARIANTS: CardVariant[] = [
   {
