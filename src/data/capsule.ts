@@ -10,16 +10,21 @@ export type Mood = {
 };
 
 export const MOODS: Mood[] = [
-  { id: "happy",     label: "Happy",     emoji: "😊", hue: 50 },
-  { id: "sad",       label: "Sad",       emoji: "🌧",  hue: 220 },
-  { id: "hopeful",   label: "Hopeful",   emoji: "✨", hue: 280 },
-  { id: "nostalgic", label: "Nostalgic", emoji: "🌙", hue: 260 },
-  { id: "lost",      label: "Lost",      emoji: "🌫",  hue: 240 },
-  { id: "motivated", label: "Motivated", emoji: "🔥", hue: 20 },
-  { id: "grateful",  label: "Grateful",  emoji: "🌸", hue: 320 },
-  { id: "loved",     label: "Loved",     emoji: "💜", hue: 290 },
-  { id: "anxious",   label: "Anxious",   emoji: "🌊", hue: 200 },
-  { id: "peaceful",  label: "Peaceful",  emoji: "🕊", hue: 180 },
+  { id: "happy",       label: "Happy",       emoji: "😊", hue: 50 },
+  { id: "sad",         label: "Sad",         emoji: "🌧",  hue: 220 },
+  { id: "hopeful",     label: "Hopeful",     emoji: "✨", hue: 280 },
+  { id: "nostalgic",   label: "Nostalgic",   emoji: "🌙", hue: 260 },
+  { id: "lost",        label: "Lost",        emoji: "🌫",  hue: 240 },
+  { id: "motivated",   label: "Motivated",   emoji: "🔥", hue: 20 },
+  { id: "grateful",    label: "Grateful",    emoji: "🌸", hue: 320 },
+  { id: "loved",       label: "Loved",       emoji: "💜", hue: 290 },
+  { id: "anxious",     label: "Anxious",     emoji: "🌊", hue: 200 },
+  { id: "peaceful",    label: "Peaceful",    emoji: "🕊", hue: 180 },
+  { id: "dreamy",      label: "Dreamy",      emoji: "🌌", hue: 270 },
+  { id: "brave",       label: "Brave",       emoji: "🦋", hue: 340 },
+  { id: "excited",     label: "Excited",     emoji: "🎆", hue: 30 },
+  { id: "melancholic", label: "Melancholic", emoji: "🥀", hue: 250 },
+  { id: "inspired",    label: "Inspired",    emoji: "⭐", hue: 45 },
 ];
 
 // Original phrases — written for this app, not lyrics.
