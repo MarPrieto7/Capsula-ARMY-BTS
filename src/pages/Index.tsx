@@ -168,8 +168,22 @@ const Index = () => {
 
       {step === "intro" && <MobileStartButton onStart={startCompose} label={t.start} />}
 
-      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 text-center text-xs text-foreground/50 sm:px-6 md:px-10">
-        {t.footer}
+      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 text-center text-xs text-foreground/55 sm:px-6 md:px-10">
+        <p className="mx-auto max-w-3xl leading-relaxed">{t.footerBy}</p>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+          <a
+            href="https://www.instagram.com/mar_con_art/"
+            target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-foreground/5 px-3 py-1.5 text-foreground/80 transition hover:bg-foreground/10 hover:text-foreground"
+            aria-label="Instagram @mar_con_art"
+          >
+            <Instagram className="h-3.5 w-3.5" />
+            <span className="tracking-[0.18em] uppercase text-[10px]">@mar_con_art</span>
+          </a>
+        </div>
+        <p className="mt-4 text-[10px] uppercase tracking-[0.25em] text-foreground/45">
+          {t.footerTrademark}
+        </p>
       </footer>
     </main>
   );
