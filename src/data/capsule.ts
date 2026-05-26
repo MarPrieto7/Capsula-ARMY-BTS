@@ -10,16 +10,21 @@ export type Mood = {
 };
 
 export const MOODS: Mood[] = [
-  { id: "happy",     label: "Happy",     emoji: "😊", hue: 50 },
-  { id: "sad",       label: "Sad",       emoji: "🌧",  hue: 220 },
-  { id: "hopeful",   label: "Hopeful",   emoji: "✨", hue: 280 },
-  { id: "nostalgic", label: "Nostalgic", emoji: "🌙", hue: 260 },
-  { id: "lost",      label: "Lost",      emoji: "🌫",  hue: 240 },
-  { id: "motivated", label: "Motivated", emoji: "🔥", hue: 20 },
-  { id: "grateful",  label: "Grateful",  emoji: "🌸", hue: 320 },
-  { id: "loved",     label: "Loved",     emoji: "💜", hue: 290 },
-  { id: "anxious",   label: "Anxious",   emoji: "🌊", hue: 200 },
-  { id: "peaceful",  label: "Peaceful",  emoji: "🕊", hue: 180 },
+  { id: "happy",       label: "Happy",       emoji: "😊", hue: 50 },
+  { id: "sad",         label: "Sad",         emoji: "🌧",  hue: 220 },
+  { id: "hopeful",     label: "Hopeful",     emoji: "✨", hue: 280 },
+  { id: "nostalgic",   label: "Nostalgic",   emoji: "🌙", hue: 260 },
+  { id: "lost",        label: "Lost",        emoji: "🌫",  hue: 240 },
+  { id: "motivated",   label: "Motivated",   emoji: "🔥", hue: 20 },
+  { id: "grateful",    label: "Grateful",    emoji: "🌸", hue: 320 },
+  { id: "loved",       label: "Loved",       emoji: "💜", hue: 290 },
+  { id: "anxious",     label: "Anxious",     emoji: "🌊", hue: 200 },
+  { id: "peaceful",    label: "Peaceful",    emoji: "🕊", hue: 180 },
+  { id: "dreamy",      label: "Dreamy",      emoji: "🌌", hue: 270 },
+  { id: "brave",       label: "Brave",       emoji: "🦋", hue: 340 },
+  { id: "excited",     label: "Excited",     emoji: "🎆", hue: 30 },
+  { id: "melancholic", label: "Melancholic", emoji: "🥀", hue: 250 },
+  { id: "inspired",    label: "Inspired",    emoji: "⭐", hue: 45 },
 ];
 
 // Original phrases — written for this app, not lyrics.
@@ -73,6 +78,31 @@ export const PHRASES: Record<string, string[]> = {
     "Stillness is its own kind of song.",
     "The moon doesn't rush, and neither must you.",
     "Tonight, let your bones rest. The stars are keeping watch.",
+  ],
+  dreamy: [
+    "Tonight your thoughts wear silk and walk barefoot through the stars.",
+    "Some dreams are letters from the future — read them gently.",
+    "The moon left a little of its light inside you. Keep it.",
+  ],
+  brave: [
+    "Even your trembling hands are doing something holy.",
+    "Brave is just fear that decided to keep walking.",
+    "You crossed your own ocean today — and you're still standing.",
+  ],
+  excited: [
+    "Your heart is dancing, and the whole sky noticed.",
+    "Something good is on the way — you can feel the violet humming.",
+    "Today feels like a song you've never heard but already love.",
+  ],
+  melancholic: [
+    "Some sadness is just love remembering itself out loud.",
+    "The grey hours have their own quiet beauty — let them speak.",
+    "You are not broken; you are tender, and that is a kind of strength.",
+  ],
+  inspired: [
+    "There's a small spark in you that the world has been waiting for.",
+    "Your ideas are stars learning how to shine in your colour.",
+    "Create softly, create bravely — the universe is listening.",
   ],
 };
 
@@ -131,20 +161,50 @@ export const SONG_INSPIRED: Record<string, SongInspired[]> = {
     { line: "Stay tonight — the silence is wide enough for both of us.",   song: "Stay",            album: "BE (2020)" },
     { line: "The moon hums, and you are allowed to rest.",                  song: "Moon",            album: "BE (2020)" },
   ],
+  dreamy: [
+    { line: "Filter the world in violet — and dream a softer truth.",      song: "Filter",          album: "Map of the Soul: 7 (2020)" },
+    { line: "Serendipity painted the sky lavender just for tonight.",      song: "Serendipity",     album: "Love Yourself: Her (2017)" },
+    { line: "Moonchild, the night is yours — wander it tenderly.",         song: "Moonchild",       album: "Mono (2018)" },
+  ],
+  brave: [
+    { line: "Not today — today our fear bows to our courage.",             song: "Not Today",       album: "You Never Walk Alone (2017)" },
+    { line: "ON: bring the pain — we have learned how to dance with it.",  song: "ON",              album: "Map of the Soul: 7 (2020)" },
+    { line: "Fire inside, soft outside — you carry both, beautifully.",    song: "Fire",            album: "The Most Beautiful Moment in Life: Young Forever (2016)" },
+  ],
+  excited: [
+    { line: "Dynamite in your chest — let the night sky hear it.",         song: "Dynamite",        album: "BE (2020)" },
+    { line: "Butter smooth — the world tips over and you keep dancing.",   song: "Butter",          album: "Butter (2021)" },
+    { line: "Idol within you wakes up — and the stage is the whole sky.",  song: "IDOL",            album: "Love Yourself: Answer (2018)" },
+  ],
+  melancholic: [
+    { line: "Spring day softly returns, and so does the ache we love.",    song: "Spring Day",      album: "You Never Walk Alone (2017)" },
+    { line: "Outro: Tear is just love asking to be felt one more time.",   song: "Outro: Tear",     album: "Love Yourself: Tear (2018)" },
+    { line: "The truth untold lies down beside you — and finally rests.",  song: "The Truth Untold",album: "Love Yourself: Tear (2018)" },
+  ],
+  inspired: [
+    { line: "Magic shop inside you opens — and the stars step in to listen.",song: "Magic Shop",    album: "Love Yourself: Tear (2018)" },
+    { line: "Mikrokosmos: every small light is a beginning, including yours.",song: "Mikrokosmos",  album: "Map of the Soul: Persona (2019)" },
+    { line: "Answer: love yourself — and the whole horizon answers back.", song: "Answer: Love Myself", album: "Love Yourself: Answer (2018)" },
+  ],
 };
 
 // Vibe titles (original ambient names — NOT BTS songs).
 export const VIBES: Record<string, string[]> = {
-  happy:     ["Sunrise in Seoul", "Lavender Skies", "Dance of Tiny Joys"],
-  sad:       ["Rain on Han River", "Quiet Letters", "Soft Goodbyes"],
-  hopeful:   ["First Light", "Constellations", "A Promise to Tomorrow"],
-  nostalgic: ["Old Polaroids", "Moonlit Hallway", "Echoes of 2013"],
-  lost:      ["Between Stars", "Unwritten Map", "Drifting Violet"],
-  motivated: ["Rise Anthem", "Embers & Gold", "Run Toward It"],
-  grateful:  ["Soft Bow", "Small Light, Big Heart", "Thank You Letter"],
-  loved:     ["Violet Embrace", "Seven Stars, One Heart", "Borahae Lullaby"],
-  anxious:   ["Held Breath", "Tide at 3am", "Soft Static"],
-  peaceful:  ["Slow Snowfall", "Tea & Moonlight", "After the Rain"],
+  happy:       ["Sunrise in Seoul", "Lavender Skies", "Dance of Tiny Joys"],
+  sad:         ["Rain on Han River", "Quiet Letters", "Soft Goodbyes"],
+  hopeful:     ["First Light", "Constellations", "A Promise to Tomorrow"],
+  nostalgic:   ["Old Polaroids", "Moonlit Hallway", "Echoes of 2013"],
+  lost:        ["Between Stars", "Unwritten Map", "Drifting Violet"],
+  motivated:   ["Rise Anthem", "Embers & Gold", "Run Toward It"],
+  grateful:    ["Soft Bow", "Small Light, Big Heart", "Thank You Letter"],
+  loved:       ["Violet Embrace", "Seven Stars, One Heart", "Borahae Lullaby"],
+  anxious:     ["Held Breath", "Tide at 3am", "Soft Static"],
+  peaceful:    ["Slow Snowfall", "Tea & Moonlight", "After the Rain"],
+  dreamy:      ["Moonchild's Path", "Lavender Lullaby", "Violet Reverie"],
+  brave:       ["Quiet Courage", "Bulletproof Heart", "Stand Tall Sonata"],
+  excited:     ["Confetti Skies", "Firework Hearts", "Borahae Boom"],
+  melancholic: ["Rainfall in Hangang", "Faded Photographs", "Soft Ache"],
+  inspired:    ["First Spark", "Galaxy in Bloom", "Violet Ink"],
 };
 
 export function pick<T>(arr: T[], seed?: number): T {

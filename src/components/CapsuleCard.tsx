@@ -34,6 +34,15 @@ const CapsuleCard = forwardRef<HTMLDivElement, Props>(({ capsule, format = "post
       className={`relative mx-auto w-full ${f.maxW} ${f.ratio} overflow-hidden rounded-3xl ${v.surfaceClass} shadow-card`}
       style={{ fontFamily: 'Inter, sans-serif' }}
     >
+      {/* Optional silhouette background */}
+      {v.bgImage && (
+        <>
+          <img src={v.bgImage} alt="" aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover opacity-95 select-none" />
+          {v.bgOverlayClass && <div className={`absolute inset-0 ${v.bgOverlayClass}`} aria-hidden="true" />}
+        </>
+      )}
+
       {/* Dancheong-inspired ornaments — Korean traditional pattern */}
       <img src={dancheong} alt="" aria-hidden="true"
         style={{ opacity: v.dancheongOpacity[0], transform: `rotate(${v.dancheongRotate}deg)` }}

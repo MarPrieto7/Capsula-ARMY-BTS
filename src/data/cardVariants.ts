@@ -1,7 +1,9 @@
-// 3 visual variants for the capsule card. Selected randomly per generation.
+// Visual variants for the capsule card. Selected randomly per generation.
 // Pure data — colors are HSL semantic tokens (no raw colors in components).
+import silhouettes7 from "@/assets/card-silhouettes-7.jpg";
+
 export type CardVariant = {
-  id: "moonlit" | "sunset" | "hanji" | "hanbok-silk" | "hanbok-norigae";
+  id: "moonlit" | "sunset" | "hanji" | "hanbok-silk" | "hanbok-norigae" | "silhouettes-7";
   // tailwind classes for the surface gradient
   surfaceClass: string;
   // glow tint over the top
@@ -12,7 +14,11 @@ export type CardVariant = {
   // dancheong rotation (deg)
   dancheongRotate: number;
   dancheongOpacity: [number, number]; // [top-right, bottom-left]
+  // optional background image (rendered behind content with overlay)
+  bgImage?: string;
+  bgOverlayClass?: string;
 };
+
 
 export const CARD_VARIANTS: CardVariant[] = [
   {
@@ -59,6 +65,17 @@ export const CARD_VARIANTS: CardVariant[] = [
     ridgeFill2: "hsl(335 50% 35%)",
     dancheongRotate: -20,
     dancheongOpacity: [0.20, 0.14],
+  },
+  {
+    id: "silhouettes-7",
+    surfaceClass: "bg-[hsl(260_55%_12%)]",
+    glowClass: "bg-gradient-to-b from-[hsl(var(--gold-soft)/0.15)] to-transparent",
+    ridgeFill1: "hsl(var(--gold-soft))",
+    ridgeFill2: "hsl(var(--violet-deep))",
+    dancheongRotate: 8,
+    dancheongOpacity: [0.10, 0.08],
+    bgImage: silhouettes7,
+    bgOverlayClass: "bg-gradient-to-b from-[hsl(260_60%_10%/0.55)] via-[hsl(260_60%_10%/0.75)] to-[hsl(260_60%_8%/0.92)]",
   },
 ];
 
