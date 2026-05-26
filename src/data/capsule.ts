@@ -161,20 +161,50 @@ export const SONG_INSPIRED: Record<string, SongInspired[]> = {
     { line: "Stay tonight — the silence is wide enough for both of us.",   song: "Stay",            album: "BE (2020)" },
     { line: "The moon hums, and you are allowed to rest.",                  song: "Moon",            album: "BE (2020)" },
   ],
+  dreamy: [
+    { line: "Filter the world in violet — and dream a softer truth.",      song: "Filter",          album: "Map of the Soul: 7 (2020)" },
+    { line: "Serendipity painted the sky lavender just for tonight.",      song: "Serendipity",     album: "Love Yourself: Her (2017)" },
+    { line: "Moonchild, the night is yours — wander it tenderly.",         song: "Moonchild",       album: "Mono (2018)" },
+  ],
+  brave: [
+    { line: "Not today — today our fear bows to our courage.",             song: "Not Today",       album: "You Never Walk Alone (2017)" },
+    { line: "ON: bring the pain — we have learned how to dance with it.",  song: "ON",              album: "Map of the Soul: 7 (2020)" },
+    { line: "Fire inside, soft outside — you carry both, beautifully.",    song: "Fire",            album: "The Most Beautiful Moment in Life: Young Forever (2016)" },
+  ],
+  excited: [
+    { line: "Dynamite in your chest — let the night sky hear it.",         song: "Dynamite",        album: "BE (2020)" },
+    { line: "Butter smooth — the world tips over and you keep dancing.",   song: "Butter",          album: "Butter (2021)" },
+    { line: "Idol within you wakes up — and the stage is the whole sky.",  song: "IDOL",            album: "Love Yourself: Answer (2018)" },
+  ],
+  melancholic: [
+    { line: "Spring day softly returns, and so does the ache we love.",    song: "Spring Day",      album: "You Never Walk Alone (2017)" },
+    { line: "Outro: Tear is just love asking to be felt one more time.",   song: "Outro: Tear",     album: "Love Yourself: Tear (2018)" },
+    { line: "The truth untold lies down beside you — and finally rests.",  song: "The Truth Untold",album: "Love Yourself: Tear (2018)" },
+  ],
+  inspired: [
+    { line: "Magic shop inside you opens — and the stars step in to listen.",song: "Magic Shop",    album: "Love Yourself: Tear (2018)" },
+    { line: "Mikrokosmos: every small light is a beginning, including yours.",song: "Mikrokosmos",  album: "Map of the Soul: Persona (2019)" },
+    { line: "Answer: love yourself — and the whole horizon answers back.", song: "Answer: Love Myself", album: "Love Yourself: Answer (2018)" },
+  ],
 };
 
 // Vibe titles (original ambient names — NOT BTS songs).
 export const VIBES: Record<string, string[]> = {
-  happy:     ["Sunrise in Seoul", "Lavender Skies", "Dance of Tiny Joys"],
-  sad:       ["Rain on Han River", "Quiet Letters", "Soft Goodbyes"],
-  hopeful:   ["First Light", "Constellations", "A Promise to Tomorrow"],
-  nostalgic: ["Old Polaroids", "Moonlit Hallway", "Echoes of 2013"],
-  lost:      ["Between Stars", "Unwritten Map", "Drifting Violet"],
-  motivated: ["Rise Anthem", "Embers & Gold", "Run Toward It"],
-  grateful:  ["Soft Bow", "Small Light, Big Heart", "Thank You Letter"],
-  loved:     ["Violet Embrace", "Seven Stars, One Heart", "Borahae Lullaby"],
-  anxious:   ["Held Breath", "Tide at 3am", "Soft Static"],
-  peaceful:  ["Slow Snowfall", "Tea & Moonlight", "After the Rain"],
+  happy:       ["Sunrise in Seoul", "Lavender Skies", "Dance of Tiny Joys"],
+  sad:         ["Rain on Han River", "Quiet Letters", "Soft Goodbyes"],
+  hopeful:     ["First Light", "Constellations", "A Promise to Tomorrow"],
+  nostalgic:   ["Old Polaroids", "Moonlit Hallway", "Echoes of 2013"],
+  lost:        ["Between Stars", "Unwritten Map", "Drifting Violet"],
+  motivated:   ["Rise Anthem", "Embers & Gold", "Run Toward It"],
+  grateful:    ["Soft Bow", "Small Light, Big Heart", "Thank You Letter"],
+  loved:       ["Violet Embrace", "Seven Stars, One Heart", "Borahae Lullaby"],
+  anxious:     ["Held Breath", "Tide at 3am", "Soft Static"],
+  peaceful:    ["Slow Snowfall", "Tea & Moonlight", "After the Rain"],
+  dreamy:      ["Moonchild's Path", "Lavender Lullaby", "Violet Reverie"],
+  brave:       ["Quiet Courage", "Bulletproof Heart", "Stand Tall Sonata"],
+  excited:     ["Confetti Skies", "Firework Hearts", "Borahae Boom"],
+  melancholic: ["Rainfall in Hangang", "Faded Photographs", "Soft Ache"],
+  inspired:    ["First Spark", "Galaxy in Bloom", "Violet Ink"],
 };
 
 export function pick<T>(arr: T[], seed?: number): T {
