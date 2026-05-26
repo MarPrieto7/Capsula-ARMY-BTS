@@ -1,5 +1,7 @@
-// 3 visual variants for the capsule card. Selected randomly per generation.
+// Visual variants for the capsule card. Selected randomly per generation.
 // Pure data — colors are HSL semantic tokens (no raw colors in components).
+import silhouettes7 from "@/assets/card-silhouettes-7.jpg";
+
 export type CardVariant = {
   id: "moonlit" | "sunset" | "hanji" | "hanbok-silk" | "hanbok-norigae" | "silhouettes-7";
   // tailwind classes for the surface gradient
