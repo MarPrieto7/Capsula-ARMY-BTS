@@ -168,17 +168,19 @@ const Index = () => {
 
       {step === "intro" && <MobileStartButton onStart={startCompose} label={t.start} />}
 
-      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 text-center text-xs text-foreground/55 sm:px-6 md:px-10">
+      <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-xs text-foreground/55 sm:px-6 md:px-10 md:pb-6">
         <p className="mx-auto max-w-3xl leading-relaxed">{t.footerBy}</p>
-        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        <div className="relative z-[60] mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
           <a
             href="https://www.instagram.com/mar_con_art/"
-            target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-foreground/5 px-3 py-1.5 text-foreground/80 transition hover:bg-foreground/10 hover:text-foreground"
+            target="_blank"
+            rel="noopener noreferrer external"
+            referrerPolicy="no-referrer"
+            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-[hsl(330_70%_55%/0.25)] via-[hsl(285_70%_55%/0.25)] to-[hsl(35_85%_60%/0.25)] px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
             aria-label="Instagram @mar_con_art"
           >
-            <Instagram className="h-3.5 w-3.5" />
-            <span className="tracking-[0.18em] uppercase text-[10px]">@mar_con_art</span>
+            <Instagram className="h-4 w-4" />
+            <span className="tracking-[0.18em] uppercase text-[11px]">@mar_con_art</span>
           </a>
         </div>
         <p className="mt-4 text-[10px] uppercase tracking-[0.25em] text-foreground/45">
