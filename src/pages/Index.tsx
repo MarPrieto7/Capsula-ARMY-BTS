@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { toPng } from "html-to-image";
+import { toBlob } from "html-to-image";
 import { Download, RefreshCw, ArrowRight, Sparkles, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -89,14 +89,12 @@ const Index = () => {
   const exportPng = async (): Promise<Blob | null> => {
     if (!cardRef.current) return null;
     const cfg = SHARE_PIXELS[format];
-    const dataUrl = await toPng(cardRef.current, {
+    return await toBlob(cardRef.current, {
       pixelRatio: cfg.ratio,
-      cacheBust: true,
+      cacheBust: false,
       canvasWidth: cfg.w,
       canvasHeight: cfg.h,
     });
-    const res = await fetch(dataUrl);
-    return await res.blob();
   };
 
   const handleDownload = async () => {
@@ -174,8 +172,13 @@ const Index = () => {
           <a
             href="https://www.instagram.com/mar_con_art/"
             target="_blank"
-            rel="noopener noreferrer external"
-            referrerPolicy="no-referrer"
+            rel="noopener noreferrer"
+            onClick={(e) => {
+              e.preventDefault();
+              const url = "https://www.instagram.com/mar_con_art/";
+              const win = window.open(url, "_blank", "noopener,noreferrer");
+              if (!win) window.location.href = url;
+            }}
             className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-[hsl(330_70%_55%/0.25)] via-[hsl(285_70%_55%/0.25)] to-[hsl(35_85%_60%/0.25)] px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
             aria-label="Instagram @mar_con_art"
           >
@@ -183,9 +186,6 @@ const Index = () => {
             <span className="tracking-[0.18em] uppercase text-[11px]">@mar_con_art</span>
           </a>
         </div>
-        <p className="mt-4 text-[10px] uppercase tracking-[0.25em] text-foreground/45">
-          {t.footerTrademark}
-        </p>
       </footer>
     </main>
   );
