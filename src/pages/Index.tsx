@@ -32,6 +32,7 @@ const Index = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const fontCssRef = useRef<string | null>(null);
   const pngCacheRef = useRef<{ key: string; blob: Blob | null }>({ key: "", blob: null });
+  const pngTaskRef = useRef<{ key: string; promise: Promise<Blob | null> | null }>({ key: "", promise: null });
   const { history, add: addHistory, clear: clearHistory } = useCapsuleHistory();
 
   // SEO — refresh on language change
@@ -107,24 +108,34 @@ const Index = () => {
     if (!cardRef.current) return null;
     const key = `${capsule?.id ?? "memory"}-${format}`;
     if (pngCacheRef.current.key === key && pngCacheRef.current.blob) return pngCacheRef.current.blob;
+    if (pngTaskRef.current.key === key && pngTaskRef.current.promise) return pngTaskRef.current.promise;
 
     const cfg = SHARE_PIXELS[format];
-    if (document.fonts?.ready) await document.fonts.ready;
-    if (!fontCssRef.current) {
-      fontCssRef.current = await getFontEmbedCSS(cardRef.current, { preferredFontFormat: "woff2" });
-    }
+    const promise = (async () => {
+      if (document.fonts?.ready) await document.fonts.ready;
+      if (!fontCssRef.current) {
+        fontCssRef.current = await getFontEmbedCSS(cardRef.current!, { preferredFontFormat: "woff2" });
+      }
 
-    const blob = await toBlob(cardRef.current, {
-      pixelRatio: cfg.ratio,
-      cacheBust: false,
-      canvasWidth: cfg.w,
-      canvasHeight: cfg.h,
-      fontEmbedCSS: fontCssRef.current,
-      preferredFontFormat: "woff2",
-      fetchRequestInit: { cache: "force-cache" },
-    });
-    pngCacheRef.current = { key, blob };
-    return blob;
+      const blob = await toBlob(cardRef.current!, {
+        pixelRatio: cfg.ratio,
+        cacheBust: false,
+        canvasWidth: cfg.w,
+        canvasHeight: cfg.h,
+        fontEmbedCSS: fontCssRef.current,
+        preferredFontFormat: "woff2",
+        fetchRequestInit: { cache: "force-cache" },
+      });
+      pngCacheRef.current = { key, blob };
+      return blob;
+    })();
+
+    pngTaskRef.current = { key, promise };
+    try {
+      return await promise;
+    } finally {
+      if (pngTaskRef.current.key === key) pngTaskRef.current.promise = null;
+    }
   };
 
   const handleDownload = async () => {
@@ -147,13 +158,15 @@ const Index = () => {
       setExportState("sharing");
       const shareBase = { title: t.shareTitle, text: t.shareText, url: window.location.origin };
       const canNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
-      const dummyFile = new File([""], fileName(), { type: "image/png" });
-      const canShareFiles = canNativeShare && typeof navigator.canShare === "function" && navigator.canShare({ files: [dummyFile] });
+      const key = `${capsule?.id ?? "memory"}-${format}`;
+      const cachedBlob = pngCacheRef.current.key === key ? pngCacheRef.current.blob : null;
+      const canShareFiles = Boolean(
+        canNativeShare && cachedBlob && typeof navigator.canShare === "function" &&
+        navigator.canShare({ files: [new File([cachedBlob], fileName(), { type: "image/png" })] })
+      );
 
       if (canShareFiles) {
-        const blob = await exportPng();
-        if (!blob) throw new Error("No PNG blob");
-        const file = new File([blob], fileName(), { type: "image/png" });
+        const file = new File([cachedBlob!], fileName(), { type: "image/png" });
         await navigator.share({ ...shareBase, files: [file] });
         toast.success(`${t.share} ✓`);
         return;
@@ -177,6 +190,15 @@ const Index = () => {
       setExportState("idle");
     }
   };
+
+  useEffect(() => {
+    if (step !== "result" || !capsule) return;
+    pngCacheRef.current = { key: "", blob: null };
+    const warmup = window.setTimeout(() => {
+      void exportPng().catch(() => undefined);
+    }, 250);
+    return () => window.clearTimeout(warmup);
+  }, [capsule, format, step]);
 
   // Calm motifs while composing (less distraction while typing)
   const calmMotifs = step === "compose";
