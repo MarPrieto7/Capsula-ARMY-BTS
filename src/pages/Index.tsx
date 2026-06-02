@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { toBlob } from "html-to-image";
-import { Download, RefreshCw, ArrowRight, Sparkles, Instagram } from "lucide-react";
+import { getFontEmbedCSS, toBlob } from "html-to-image";
+import { Download, RefreshCw, ArrowRight, Sparkles, Instagram, Share2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import StarField from "@/components/StarField";
@@ -28,7 +28,10 @@ const Index = () => {
   const [message, setMessage] = useState("");
   const [capsule, setCapsule] = useState<Capsule | null>(null);
   const [format, setFormat] = useState<CardFormat>("post");
+  const [exportState, setExportState] = useState<"idle" | "downloading" | "sharing">("idle");
   const cardRef = useRef<HTMLDivElement>(null);
+  const fontCssRef = useRef<string | null>(null);
+  const pngCacheRef = useRef<{ key: string; blob: Blob | null }>({ key: "", blob: null });
   const { history, add: addHistory, clear: clearHistory } = useCapsuleHistory();
 
   // SEO — refresh on language change
@@ -86,29 +89,92 @@ const Index = () => {
     story:  { w: 540, h: 960,  ratio: 2 }, // → 1080x1920
   };
 
+  const fileName = () => `army-capsule-${capsule?.id ?? "memory"}-${format}.png`;
+
+  const downloadBlob = (blob: Blob, filename = fileName()) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+  };
+
   const exportPng = async (): Promise<Blob | null> => {
     if (!cardRef.current) return null;
+    const key = `${capsule?.id ?? "memory"}-${format}`;
+    if (pngCacheRef.current.key === key && pngCacheRef.current.blob) return pngCacheRef.current.blob;
+
     const cfg = SHARE_PIXELS[format];
-    return await toBlob(cardRef.current, {
+    if (document.fonts?.ready) await document.fonts.ready;
+    if (!fontCssRef.current) {
+      fontCssRef.current = await getFontEmbedCSS(cardRef.current, { preferredFontFormat: "woff2" });
+    }
+
+    const blob = await toBlob(cardRef.current, {
       pixelRatio: cfg.ratio,
       cacheBust: false,
       canvasWidth: cfg.w,
       canvasHeight: cfg.h,
+      fontEmbedCSS: fontCssRef.current,
+      preferredFontFormat: "woff2",
+      fetchRequestInit: { cache: "force-cache" },
     });
+    pngCacheRef.current = { key, blob };
+    return blob;
   };
 
   const handleDownload = async () => {
     try {
+      setExportState("downloading");
       const blob = await exportPng();
       if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = `army-capsule-${capsule?.id ?? "memory"}-${format}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
-      toast.success(t.toastSaved);
+      const filename = fileName();
+      downloadBlob(blob, filename);
+      toast.success(`${t.download} ✓`, { description: filename });
     } catch {
       toast.error(t.toastError);
+    } finally {
+      setExportState("idle");
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      setExportState("sharing");
+      const shareBase = { title: t.shareTitle, text: t.shareText, url: window.location.origin };
+      const canNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
+      const dummyFile = new File([""], fileName(), { type: "image/png" });
+      const canShareFiles = canNativeShare && typeof navigator.canShare === "function" && navigator.canShare({ files: [dummyFile] });
+
+      if (canShareFiles) {
+        const blob = await exportPng();
+        if (!blob) throw new Error("No PNG blob");
+        const file = new File([blob], fileName(), { type: "image/png" });
+        await navigator.share({ ...shareBase, files: [file] });
+        toast.success(`${t.share} ✓`);
+        return;
+      }
+
+      if (canNativeShare) {
+        await navigator.share(shareBase);
+        toast.success(`${t.share} ✓`);
+        return;
+      }
+
+      const blob = await exportPng();
+      if (!blob) throw new Error("No PNG blob");
+      downloadBlob(blob);
+      toast.info(t.toastShareFallback);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      toast.error(t.toastError);
+    }
+    finally {
+      setExportState("idle");
     }
   };
 
@@ -159,6 +225,8 @@ const Index = () => {
             capsule={capsule} cardRef={cardRef}
             format={format} setFormat={setFormat}
             onDownload={handleDownload}
+            onShare={handleShare}
+            exportState={exportState}
             onRegenerate={regenerate} onReset={reset}
           />
         )}
@@ -170,17 +238,11 @@ const Index = () => {
         <p className="mx-auto max-w-3xl leading-relaxed">{t.footerBy}</p>
         <div className="relative z-[60] mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
           <a
-            href="https://www.instagram.com/mar_con_art/"
+            href="https://instagram.com/mar_con_art"
             target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => {
-              e.preventDefault();
-              const url = "https://www.instagram.com/mar_con_art/";
-              const win = window.open(url, "_blank", "noopener,noreferrer");
-              if (!win) window.location.href = url;
-            }}
+            rel="noopener"
             className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-[hsl(330_70%_55%/0.25)] via-[hsl(285_70%_55%/0.25)] to-[hsl(35_85%_60%/0.25)] px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
-            aria-label="Instagram @mar_con_art"
+            aria-label="Open Instagram @mar_con_art"
           >
             <Instagram className="h-4 w-4" />
             <span className="tracking-[0.18em] uppercase text-[11px]">@mar_con_art</span>
