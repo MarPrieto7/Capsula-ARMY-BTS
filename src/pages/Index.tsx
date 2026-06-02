@@ -239,7 +239,7 @@ const Index = () => {
         <div className="relative z-[60] mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
           <a
             href="https://instagram.com/mar_con_art"
-            target="_blank"
+            target="_top"
             rel="noopener"
             className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-[hsl(330_70%_55%/0.25)] via-[hsl(285_70%_55%/0.25)] to-[hsl(35_85%_60%/0.25)] px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
             aria-label="Open Instagram @mar_con_art"
@@ -420,17 +420,20 @@ const Compose = ({
 
 /* ---------- Result ---------- */
 const Result = ({
-  capsule, cardRef, format, setFormat, onDownload, onRegenerate, onReset,
+  capsule, cardRef, format, setFormat, onDownload, onShare, exportState, onRegenerate, onReset,
 }: {
   capsule: Capsule;
   cardRef: React.RefObject<HTMLDivElement>;
   format: CardFormat;
   setFormat: (f: CardFormat) => void;
   onDownload: () => void;
+  onShare: () => void;
+  exportState: "idle" | "downloading" | "sharing";
   onRegenerate: () => void;
   onReset: () => void;
 }) => {
   const { t } = useI18n();
+  const isExporting = exportState !== "idle";
   const formats: { id: CardFormat; label: string }[] = [
     { id: "post",    label: t.shareSizeThreads },
     { id: "square",  label: t.shareSizePost },
@@ -472,8 +475,13 @@ const Result = ({
         </div>
 
         <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
-          <Button onClick={onDownload} size="lg" className="h-12 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 shadow-glow">
-            <Download className="mr-2 h-4 w-4" /> {t.download}
+          <Button onClick={onDownload} disabled={isExporting} size="lg" className="h-12 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 shadow-glow disabled:opacity-60">
+            {exportState === "downloading" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+            {t.download}
+          </Button>
+          <Button onClick={onShare} disabled={isExporting} size="lg" variant="secondary" className="h-12 rounded-full bg-secondary/80 px-6 hover:bg-secondary disabled:opacity-60">
+            {exportState === "sharing" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Share2 className="mr-2 h-4 w-4" />}
+            {t.share}
           </Button>
           <Button onClick={onRegenerate} size="lg" variant="secondary" className="h-12 rounded-full bg-secondary/80 px-6 hover:bg-secondary">
             <RefreshCw className="mr-2 h-4 w-4" /> {t.regenerate}
