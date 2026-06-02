@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { toBlob } from "html-to-image";
-import { Download, RefreshCw, ArrowRight, Sparkles, Instagram } from "lucide-react";
+import { getFontEmbedCSS, toBlob } from "html-to-image";
+import { Download, RefreshCw, ArrowRight, Sparkles, Instagram, Share2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import StarField from "@/components/StarField";
@@ -28,7 +28,12 @@ const Index = () => {
   const [message, setMessage] = useState("");
   const [capsule, setCapsule] = useState<Capsule | null>(null);
   const [format, setFormat] = useState<CardFormat>("post");
+  const [exportState, setExportState] = useState<"idle" | "downloading" | "sharing">("idle");
+  const [lastDownload, setLastDownload] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
+  const fontCssRef = useRef<string | null>(null);
+  const pngCacheRef = useRef<{ key: string; blob: Blob | null }>({ key: "", blob: null });
+  const pngTaskRef = useRef<{ key: string; promise: Promise<Blob | null> | null }>({ key: "", promise: null });
   const { history, add: addHistory, clear: clearHistory } = useCapsuleHistory();
 
   // SEO — refresh on language change
@@ -61,6 +66,7 @@ const Index = () => {
   const generate = () => {
     if (!mood) return;
     const c = generateCapsule(mood, sanitize(message));
+    setLastDownload("");
     setCapsule(c);
     addHistory(c);
     setStep("result");
@@ -68,6 +74,7 @@ const Index = () => {
   const regenerate = () => {
     if (!mood) return;
     const c = generateCapsule(mood, sanitize(message));
+    setLastDownload("");
     setCapsule(c);
     addHistory(c);
   };
@@ -75,6 +82,7 @@ const Index = () => {
     setCapsule(c);
     setMood(c.mood.id);
     setMessage(c.message ?? "");
+    setLastDownload("");
     setStep("result");
   };
   const reset = () => { setStep("intro"); setMood(null); setMessage(""); setCapsule(null); };
@@ -86,31 +94,127 @@ const Index = () => {
     story:  { w: 540, h: 960,  ratio: 2 }, // → 1080x1920
   };
 
+  const fileName = () => `army-capsule-${capsule?.id ?? "memory"}-${format}.png`;
+
+  const downloadBlob = (blob: Blob, filename = fileName()) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+  };
+
   const exportPng = async (): Promise<Blob | null> => {
     if (!cardRef.current) return null;
+    const key = `${capsule?.id ?? "memory"}-${format}`;
+    if (pngCacheRef.current.key === key && pngCacheRef.current.blob) return pngCacheRef.current.blob;
+    if (pngTaskRef.current.key === key && pngTaskRef.current.promise) return pngTaskRef.current.promise;
+
     const cfg = SHARE_PIXELS[format];
-    return await toBlob(cardRef.current, {
-      pixelRatio: cfg.ratio,
-      cacheBust: false,
-      canvasWidth: cfg.w,
-      canvasHeight: cfg.h,
-    });
+    const promise = (async () => {
+      if (document.fonts?.ready) await document.fonts.ready;
+      if (!fontCssRef.current) {
+        fontCssRef.current = await getFontEmbedCSS(cardRef.current!, { preferredFontFormat: "woff2" });
+      }
+
+      const blob = await toBlob(cardRef.current!, {
+        pixelRatio: cfg.ratio,
+        cacheBust: false,
+        canvasWidth: cfg.w,
+        canvasHeight: cfg.h,
+        fontEmbedCSS: fontCssRef.current ?? undefined,
+        preferredFontFormat: "woff2",
+        fetchRequestInit: { cache: "force-cache" },
+      });
+      pngCacheRef.current = { key, blob };
+      return blob;
+    })();
+
+    pngTaskRef.current = { key, promise };
+    try {
+      return await promise;
+    } finally {
+      if (pngTaskRef.current.key === key) pngTaskRef.current.promise = null;
+    }
   };
 
   const handleDownload = async () => {
     try {
+      setExportState("downloading");
       const blob = await exportPng();
       if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = `army-capsule-${capsule?.id ?? "memory"}-${format}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
-      toast.success(t.toastSaved);
+      const filename = fileName();
+      downloadBlob(blob, filename);
+      setLastDownload(filename);
+      window.setTimeout(() => setLastDownload((current) => current === filename ? "" : current), 8000);
+      toast.success(`${t.download} ✓`, { description: filename });
     } catch {
       toast.error(t.toastError);
+    } finally {
+      setExportState("idle");
     }
   };
+
+  const handleShare = async () => {
+    try {
+      setExportState("sharing");
+      const shareBase = { title: t.shareTitle, text: t.shareText, url: window.location.origin };
+      const canNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
+      const key = `${capsule?.id ?? "memory"}-${format}`;
+      const cachedBlob = pngCacheRef.current.key === key ? pngCacheRef.current.blob : null;
+      const canShareFiles = Boolean(
+        canNativeShare && cachedBlob && typeof navigator.canShare === "function" &&
+        navigator.canShare({ files: [new File([cachedBlob], fileName(), { type: "image/png" })] })
+      );
+
+      if (canShareFiles) {
+        const file = new File([cachedBlob!], fileName(), { type: "image/png" });
+        await navigator.share({ ...shareBase, files: [file] });
+        toast.success(`${t.share} ✓`);
+        return;
+      }
+
+      if (canNativeShare) {
+        await navigator.share(shareBase);
+        toast.success(`${t.share} ✓`);
+        return;
+      }
+
+      const blob = await exportPng();
+      if (!blob) throw new Error("No PNG blob");
+      downloadBlob(blob);
+      toast.info(t.toastShareFallback);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      toast.error(t.toastError);
+    }
+    finally {
+      setExportState("idle");
+    }
+  };
+
+  const copyInstagramHandle = async () => {
+    const handle = "@mar_con_art";
+    try {
+      await navigator.clipboard?.writeText(handle);
+      toast.success(`Instagram ${handle} copiado 💜`);
+    } catch {
+      toast.info(`Instagram: ${handle}`);
+    }
+  };
+
+  useEffect(() => {
+    if (step !== "result" || !capsule) return;
+    pngCacheRef.current = { key: "", blob: null };
+    const warmup = window.setTimeout(() => {
+      void exportPng().catch(() => undefined);
+    }, 250);
+    return () => window.clearTimeout(warmup);
+  }, [capsule, format, step]);
 
   // Calm motifs while composing (less distraction while typing)
   const calmMotifs = step === "compose";
@@ -159,6 +263,9 @@ const Index = () => {
             capsule={capsule} cardRef={cardRef}
             format={format} setFormat={setFormat}
             onDownload={handleDownload}
+            onShare={handleShare}
+            exportState={exportState}
+            lastDownload={lastDownload}
             onRegenerate={regenerate} onReset={reset}
           />
         )}
@@ -169,22 +276,15 @@ const Index = () => {
       <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-xs text-foreground/55 sm:px-6 md:px-10 md:pb-6">
         <p className="mx-auto max-w-3xl leading-relaxed">{t.footerBy}</p>
         <div className="relative z-[60] mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-          <a
-            href="https://www.instagram.com/mar_con_art/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => {
-              e.preventDefault();
-              const url = "https://www.instagram.com/mar_con_art/";
-              const win = window.open(url, "_blank", "noopener,noreferrer");
-              if (!win) window.location.href = url;
-            }}
+          <button
+            type="button"
+            onClick={copyInstagramHandle}
             className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-[hsl(330_70%_55%/0.25)] via-[hsl(285_70%_55%/0.25)] to-[hsl(35_85%_60%/0.25)] px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
-            aria-label="Instagram @mar_con_art"
+            aria-label="Copiar Instagram @mar_con_art"
           >
             <Instagram className="h-4 w-4" />
             <span className="tracking-[0.18em] uppercase text-[11px]">@mar_con_art</span>
-          </a>
+          </button>
         </div>
       </footer>
     </main>
@@ -246,7 +346,6 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             width={1920} height={1280}
             loading="eager"
             decoding="async"
-            fetchPriority="high"
             sizes="(min-width: 768px) 50vw, 100vw"
             className="block aspect-[3/2] w-full max-h-[min(34svh,20rem)] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
             style={{ transform: `translateY(${scrollY * 0.025}px)` }}
@@ -358,17 +457,21 @@ const Compose = ({
 
 /* ---------- Result ---------- */
 const Result = ({
-  capsule, cardRef, format, setFormat, onDownload, onRegenerate, onReset,
+  capsule, cardRef, format, setFormat, onDownload, onShare, exportState, lastDownload, onRegenerate, onReset,
 }: {
   capsule: Capsule;
   cardRef: React.RefObject<HTMLDivElement>;
   format: CardFormat;
   setFormat: (f: CardFormat) => void;
   onDownload: () => void;
+  onShare: () => void;
+  exportState: "idle" | "downloading" | "sharing";
+  lastDownload: string;
   onRegenerate: () => void;
   onReset: () => void;
 }) => {
   const { t } = useI18n();
+  const isExporting = exportState !== "idle";
   const formats: { id: CardFormat; label: string }[] = [
     { id: "post",    label: t.shareSizeThreads },
     { id: "square",  label: t.shareSizePost },
@@ -410,13 +513,23 @@ const Result = ({
         </div>
 
         <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
-          <Button onClick={onDownload} size="lg" className="h-12 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 shadow-glow">
-            <Download className="mr-2 h-4 w-4" /> {t.download}
+          <Button onClick={onDownload} disabled={isExporting} size="lg" className="h-12 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 shadow-glow disabled:opacity-60">
+            {exportState === "downloading" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+            {t.download}
+          </Button>
+          <Button onClick={onShare} disabled={isExporting} size="lg" variant="secondary" className="h-12 rounded-full bg-secondary/80 px-6 hover:bg-secondary disabled:opacity-60">
+            {exportState === "sharing" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Share2 className="mr-2 h-4 w-4" />}
+            {t.share}
           </Button>
           <Button onClick={onRegenerate} size="lg" variant="secondary" className="h-12 rounded-full bg-secondary/80 px-6 hover:bg-secondary">
             <RefreshCw className="mr-2 h-4 w-4" /> {t.regenerate}
           </Button>
         </div>
+        {lastDownload && (
+          <p className="mt-3 text-xs text-gold-soft/90" role="status" aria-live="polite">
+            {t.toastSaved}: {lastDownload}
+          </p>
+        )}
 
         <button onClick={onReset} className="mt-8 text-xs uppercase tracking-[0.3em] text-foreground/50 hover:text-foreground/80 transition">
           {t.another}
