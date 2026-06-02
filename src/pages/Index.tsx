@@ -122,7 +122,7 @@ const Index = () => {
         cacheBust: false,
         canvasWidth: cfg.w,
         canvasHeight: cfg.h,
-        fontEmbedCSS: fontCssRef.current,
+        fontEmbedCSS: fontCssRef.current ?? undefined,
         preferredFontFormat: "woff2",
         fetchRequestInit: { cache: "force-cache" },
       });
