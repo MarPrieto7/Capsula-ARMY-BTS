@@ -29,6 +29,7 @@ const Index = () => {
   const [capsule, setCapsule] = useState<Capsule | null>(null);
   const [format, setFormat] = useState<CardFormat>("post");
   const [exportState, setExportState] = useState<"idle" | "downloading" | "sharing">("idle");
+  const [lastDownload, setLastDownload] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
   const fontCssRef = useRef<string | null>(null);
   const pngCacheRef = useRef<{ key: string; blob: Blob | null }>({ key: "", blob: null });
@@ -145,6 +146,8 @@ const Index = () => {
       if (!blob) return;
       const filename = fileName();
       downloadBlob(blob, filename);
+      setLastDownload(filename);
+      window.setTimeout(() => setLastDownload((current) => current === filename ? "" : current), 8000);
       toast.success(`${t.download} ✓`, { description: filename });
     } catch {
       toast.error(t.toastError);
@@ -249,6 +252,7 @@ const Index = () => {
             onDownload={handleDownload}
             onShare={handleShare}
             exportState={exportState}
+            lastDownload={lastDownload}
             onRegenerate={regenerate} onReset={reset}
           />
         )}
@@ -441,7 +445,7 @@ const Compose = ({
 
 /* ---------- Result ---------- */
 const Result = ({
-  capsule, cardRef, format, setFormat, onDownload, onShare, exportState, onRegenerate, onReset,
+  capsule, cardRef, format, setFormat, onDownload, onShare, exportState, lastDownload, onRegenerate, onReset,
 }: {
   capsule: Capsule;
   cardRef: React.RefObject<HTMLDivElement>;
@@ -450,6 +454,7 @@ const Result = ({
   onDownload: () => void;
   onShare: () => void;
   exportState: "idle" | "downloading" | "sharing";
+  lastDownload: string;
   onRegenerate: () => void;
   onReset: () => void;
 }) => {
@@ -508,6 +513,11 @@ const Result = ({
             <RefreshCw className="mr-2 h-4 w-4" /> {t.regenerate}
           </Button>
         </div>
+        {lastDownload && (
+          <p className="mt-3 text-xs text-gold-soft/90" role="status" aria-live="polite">
+            {t.toastSaved}: {lastDownload}
+          </p>
+        )}
 
         <button onClick={onReset} className="mt-8 text-xs uppercase tracking-[0.3em] text-foreground/50 hover:text-foreground/80 transition">
           {t.another}
