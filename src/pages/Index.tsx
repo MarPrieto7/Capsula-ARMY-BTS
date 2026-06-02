@@ -66,6 +66,7 @@ const Index = () => {
   const generate = () => {
     if (!mood) return;
     const c = generateCapsule(mood, sanitize(message));
+    setLastDownload("");
     setCapsule(c);
     addHistory(c);
     setStep("result");
@@ -73,6 +74,7 @@ const Index = () => {
   const regenerate = () => {
     if (!mood) return;
     const c = generateCapsule(mood, sanitize(message));
+    setLastDownload("");
     setCapsule(c);
     addHistory(c);
   };
@@ -80,6 +82,7 @@ const Index = () => {
     setCapsule(c);
     setMood(c.mood.id);
     setMessage(c.message ?? "");
+    setLastDownload("");
     setStep("result");
   };
   const reset = () => { setStep("intro"); setMood(null); setMessage(""); setCapsule(null); };
