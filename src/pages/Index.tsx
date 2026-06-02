@@ -330,7 +330,6 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             width={1920} height={1280}
             loading="eager"
             decoding="async"
-            fetchPriority="high"
             sizes="(min-width: 768px) 50vw, 100vw"
             className="block aspect-[3/2] w-full max-h-[min(34svh,20rem)] object-contain object-center sm:max-h-[50vh] md:max-h-[76vh]"
             style={{ transform: `translateY(${scrollY * 0.025}px)` }}
