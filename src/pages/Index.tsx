@@ -197,6 +197,16 @@ const Index = () => {
     }
   };
 
+  const copyInstagramHandle = async () => {
+    const handle = "@mar_con_art";
+    try {
+      await navigator.clipboard?.writeText(handle);
+      toast.success(`Instagram ${handle} copiado 💜`);
+    } catch {
+      toast.info(`Instagram: ${handle}`);
+    }
+  };
+
   useEffect(() => {
     if (step !== "result" || !capsule) return;
     pngCacheRef.current = { key: "", blob: null };
@@ -266,16 +276,15 @@ const Index = () => {
       <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-xs text-foreground/55 sm:px-6 md:px-10 md:pb-6">
         <p className="mx-auto max-w-3xl leading-relaxed">{t.footerBy}</p>
         <div className="relative z-[60] mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-          <a
-            href="https://instagram.com/mar_con_art"
-            target="_top"
-            rel="noopener"
+          <button
+            type="button"
+            onClick={copyInstagramHandle}
             className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-[hsl(330_70%_55%/0.25)] via-[hsl(285_70%_55%/0.25)] to-[hsl(35_85%_60%/0.25)] px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
-            aria-label="Open Instagram @mar_con_art"
+            aria-label="Copiar Instagram @mar_con_art"
           >
             <Instagram className="h-4 w-4" />
             <span className="tracking-[0.18em] uppercase text-[11px]">@mar_con_art</span>
-          </a>
+          </button>
         </div>
       </footer>
     </main>
