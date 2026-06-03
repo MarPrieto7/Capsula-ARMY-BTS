@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getFontEmbedCSS, toBlob } from "html-to-image";
+import { toBlob } from "html-to-image";
 import { Download, RefreshCw, ArrowRight, Sparkles, Instagram, Share2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -17,9 +17,9 @@ import { MOODS, generateCapsule, sanitize, type Capsule } from "@/data/capsule";
 import { useI18n } from "@/hooks/useI18n";
 import hero from "@/assets/army-hero-silhouettes.jpg";
 import silk from "@/assets/silk-purple.jpg";
-import composeArt from "@/assets/army-compose.jpg";
 
 type Step = "intro" | "compose" | "result";
+const INSTAGRAM_URL = "https://www.instagram.com/mar_con_art/";
 
 const Index = () => {
   const { t, lang } = useI18n();
@@ -30,8 +30,8 @@ const Index = () => {
   const [format, setFormat] = useState<CardFormat>("post");
   const [exportState, setExportState] = useState<"idle" | "downloading" | "sharing">("idle");
   const [lastDownload, setLastDownload] = useState("");
+  const [downloadError, setDownloadError] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
-  const fontCssRef = useRef<string | null>(null);
   const pngCacheRef = useRef<{ key: string; blob: Blob | null }>({ key: "", blob: null });
   const pngTaskRef = useRef<{ key: string; promise: Promise<Blob | null> | null }>({ key: "", promise: null });
   const { history, add: addHistory, clear: clearHistory } = useCapsuleHistory();
@@ -67,6 +67,7 @@ const Index = () => {
     if (!mood) return;
     const c = generateCapsule(mood, sanitize(message));
     setLastDownload("");
+    setDownloadError("");
     setCapsule(c);
     addHistory(c);
     setStep("result");
@@ -75,6 +76,7 @@ const Index = () => {
     if (!mood) return;
     const c = generateCapsule(mood, sanitize(message));
     setLastDownload("");
+    setDownloadError("");
     setCapsule(c);
     addHistory(c);
   };
@@ -83,9 +85,10 @@ const Index = () => {
     setMood(c.mood.id);
     setMessage(c.message ?? "");
     setLastDownload("");
+    setDownloadError("");
     setStep("result");
   };
-  const reset = () => { setStep("intro"); setMood(null); setMessage(""); setCapsule(null); };
+  const reset = () => { setStep("intro"); setMood(null); setMessage(""); setCapsule(null); setDownloadError(""); };
 
   // Native share-target sizes (in CSS px → toPng's pixelRatio scales up)
   const SHARE_PIXELS: Record<CardFormat, { w: number; h: number; ratio: number }> = {
@@ -117,16 +120,13 @@ const Index = () => {
     const cfg = SHARE_PIXELS[format];
     const promise = (async () => {
       if (document.fonts?.ready) await document.fonts.ready;
-      if (!fontCssRef.current) {
-        fontCssRef.current = await getFontEmbedCSS(cardRef.current!, { preferredFontFormat: "woff2" });
-      }
 
       const blob = await toBlob(cardRef.current!, {
         pixelRatio: cfg.ratio,
         cacheBust: false,
         canvasWidth: cfg.w,
         canvasHeight: cfg.h,
-        fontEmbedCSS: fontCssRef.current ?? undefined,
+        skipFonts: true,
         preferredFontFormat: "woff2",
         fetchRequestInit: { cache: "force-cache" },
       });
@@ -145,14 +145,17 @@ const Index = () => {
   const handleDownload = async () => {
     try {
       setExportState("downloading");
+      setDownloadError("");
+      setLastDownload("");
       const blob = await exportPng();
-      if (!blob) return;
+      if (!blob) throw new Error("No PNG blob");
       const filename = fileName();
       downloadBlob(blob, filename);
       setLastDownload(filename);
       window.setTimeout(() => setLastDownload((current) => current === filename ? "" : current), 8000);
       toast.success(`${t.download} ✓`, { description: filename });
     } catch {
+      setDownloadError(t.toastError);
       toast.error(t.toastError);
     } finally {
       setExportState("idle");
@@ -197,14 +200,8 @@ const Index = () => {
     }
   };
 
-  const copyInstagramHandle = async () => {
-    const handle = "@mar_con_art";
-    try {
-      await navigator.clipboard?.writeText(handle);
-      toast.success(`Instagram ${handle} copiado 💜`);
-    } catch {
-      toast.info(`Instagram: ${handle}`);
-    }
+  const openInstagramProfile = () => {
+    toast.info("Abriendo Instagram en esta pestaña…");
   };
 
   useEffect(() => {
@@ -266,6 +263,7 @@ const Index = () => {
             onShare={handleShare}
             exportState={exportState}
             lastDownload={lastDownload}
+            downloadError={downloadError}
             onRegenerate={regenerate} onReset={reset}
           />
         )}
@@ -276,15 +274,17 @@ const Index = () => {
       <footer className="relative z-10 mt-10 border-t border-foreground/10 px-4 py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-xs text-foreground/55 sm:px-6 md:px-10 md:pb-6">
         <p className="mx-auto max-w-3xl leading-relaxed">{t.footerBy}</p>
         <div className="relative z-[60] mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-          <button
-            type="button"
-            onClick={copyInstagramHandle}
-            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-[hsl(330_70%_55%/0.25)] via-[hsl(285_70%_55%/0.25)] to-[hsl(35_85%_60%/0.25)] px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
-            aria-label="Copiar Instagram @mar_con_art"
+          <a
+            href={INSTAGRAM_URL}
+            target="_top"
+            rel="noopener noreferrer"
+            onClick={openInstagramProfile}
+            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-gradient-to-r from-primary/20 via-secondary/80 to-accent/20 px-4 py-2 text-foreground/90 shadow-sm transition hover:scale-[1.03] hover:text-foreground hover:shadow-glow"
+            aria-label="Abrir Instagram @mar_con_art"
           >
             <Instagram className="h-4 w-4" />
             <span className="tracking-[0.18em] uppercase text-[11px]">@mar_con_art</span>
-          </button>
+          </a>
         </div>
       </footer>
     </main>
@@ -457,7 +457,7 @@ const Compose = ({
 
 /* ---------- Result ---------- */
 const Result = ({
-  capsule, cardRef, format, setFormat, onDownload, onShare, exportState, lastDownload, onRegenerate, onReset,
+  capsule, cardRef, format, setFormat, onDownload, onShare, exportState, lastDownload, downloadError, onRegenerate, onReset,
 }: {
   capsule: Capsule;
   cardRef: React.RefObject<HTMLDivElement>;
@@ -467,6 +467,7 @@ const Result = ({
   onShare: () => void;
   exportState: "idle" | "downloading" | "sharing";
   lastDownload: string;
+  downloadError: string;
   onRegenerate: () => void;
   onReset: () => void;
 }) => {
@@ -515,7 +516,7 @@ const Result = ({
         <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
           <Button onClick={onDownload} disabled={isExporting} size="lg" className="h-12 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 shadow-glow disabled:opacity-60">
             {exportState === "downloading" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-            {t.download}
+            {exportState === "downloading" ? `${t.download}…` : t.download}
           </Button>
           <Button onClick={onShare} disabled={isExporting} size="lg" variant="secondary" className="h-12 rounded-full bg-secondary/80 px-6 hover:bg-secondary disabled:opacity-60">
             {exportState === "sharing" ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Share2 className="mr-2 h-4 w-4" />}
@@ -528,6 +529,16 @@ const Result = ({
         {lastDownload && (
           <p className="mt-3 text-xs text-gold-soft/90" role="status" aria-live="polite">
             {t.toastSaved}: {lastDownload}
+          </p>
+        )}
+        {exportState === "downloading" && (
+          <p className="mt-3 text-xs text-foreground/60" role="status" aria-live="polite">
+            {t.download} PNG…
+          </p>
+        )}
+        {downloadError && (
+          <p className="mt-3 text-xs text-destructive" role="alert">
+            {downloadError}
           </p>
         )}
 
